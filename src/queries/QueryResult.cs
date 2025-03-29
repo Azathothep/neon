@@ -88,7 +88,7 @@ namespace neon
 
 			if (m_Mode == QueryResultMode.Safe)
 			{
-                Debug.WriteLine("Dirty: rebuilding");
+                // Debug.WriteLine("Dirty: rebuilding");
 
 				m_Storage = MakeStorage(enumerator);
                 m_IsDirty = false;

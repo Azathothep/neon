@@ -26,7 +26,7 @@ namespace neon
         {
             if (m_IsDirty)
             {
-                Debug.WriteLine("IsDirty: rebuilding");
+                // Debug.WriteLine("IsDirty: rebuilding");
                 m_RequestedArchetypes = m_RequestArchetypes.Invoke();
                 m_IsDirty = false;
             }
