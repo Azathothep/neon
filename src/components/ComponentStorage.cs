@@ -69,6 +69,22 @@ namespace neon
                 return iterableQuery;
             }
 
+            public IComponentIterator Get<T1, T2, T3, T4, T5>(IQuery query, QueryType queryType) where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent
+            {
+                IComponentIterator iterableQuery = new ComponentIterator<T1, T2, T3, T4, T5>(() => RequestArchetypes(query.Filters), query.IncludeInactive);
+                if (queryType == QueryType.Cached)
+                    AddIterableToCollection(query.Filters, iterableQuery);
+                return iterableQuery;
+            }
+
+            public IComponentIterator Get<T1, T2, T3, T4, T5, T6>(IQuery query, QueryType queryType) where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent where T6 : class, IComponent
+            {
+                IComponentIterator iterableQuery = new ComponentIterator<T1, T2, T3, T4, T5, T6>(() => RequestArchetypes(query.Filters), query.IncludeInactive);
+                if (queryType == QueryType.Cached)
+                    AddIterableToCollection(query.Filters, iterableQuery);
+                return iterableQuery;
+            }
+
             private void AddIterableToCollection(IQueryFilter[] filters, IComponentIterator iterableQuery)
             {
                 for (int i = 0; i < filters.Length; i++)

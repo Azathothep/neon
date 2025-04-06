@@ -61,5 +61,27 @@ namespace neon
                 }
             );
         }
+
+        public static IEnumerable<(EntityID, T1, T2, T3, T4, T5)> Get<T1, T2, T3, T4, T5>(Query<T1, T2, T3, T4, T5> query, QueryType queryType, QueryResultMode mode = QueryResultMode.Safe) where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent
+        {
+            return (IEnumerable<(EntityID, T1, T2, T3, T4, T5)>)
+                storage.Get(query, queryType, (provider) =>
+                {
+                    IComponentIterator iterator = provider.Get<T1, T2, T3, T4, T5>(query, queryType);
+                    return new QueryResult<T1, T2, T3, T4, T5>(iterator, mode);
+                }
+            );
+        }
+
+        public static IEnumerable<(EntityID, T1, T2, T3, T4, T5, T6)> Get<T1, T2, T3, T4, T5, T6>(Query<T1, T2, T3, T4, T5, T6> query, QueryType queryType, QueryResultMode mode = QueryResultMode.Safe) where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent where T6 : class, IComponent
+        {
+            return (IEnumerable<(EntityID, T1, T2, T3, T4, T5, T6)>)
+                storage.Get(query, queryType, (provider) =>
+                {
+                    IComponentIterator iterator = provider.Get<T1, T2, T3, T4, T5, T6>(query, queryType);
+                    return new QueryResult<T1, T2, T3, T4, T5, T6>(iterator, mode);
+                }
+            );
+        }
     }
 }
