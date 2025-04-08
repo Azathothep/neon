@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -65,6 +66,16 @@ namespace neon
         { }
 
         public (EntityID, T1?, T2?, T3?, T4?, T5?, T6?) Current => GetCurrentResult<T1, T2, T3, T4, T5, T6>();
+
+        object IEnumerator.Current => Current;
+    }
+
+    public class QueryIterator<T1, T2, T3, T4, T5, T6, T7> : QueryIterator, IEnumerator<(EntityID, T1?, T2?, T3?, T4?, T5?, T6?, T7?)> where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent where T6 : class, IComponent where T7 : class, IComponent
+    {
+        public QueryIterator((Archetype, List<EntityID>)[] archetypes, bool includeInactive) : base(archetypes, new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>(), Components.GetID<T4>(), Components.GetID<T5>(), Components.GetID<T6>(), Components.GetID<T7>() }, includeInactive)
+        { }
+
+        public (EntityID, T1?, T2?, T3?, T4?, T5?, T6?, T7?) Current => GetCurrentResult<T1, T2, T3, T4, T5, T6, T7>();
 
         object IEnumerator.Current => Current;
     }
@@ -188,6 +199,18 @@ namespace neon
                 Get<T4>(m_ColumnIndices[3]),
                 Get<T5>(m_ColumnIndices[4]),
                 Get<T6>(m_ColumnIndices[5]));
+        }
+
+        protected (EntityID, T1?, T2?, T3?, T4?, T5?, T6?, T7?) GetCurrentResult<T1, T2, T3, T4, T5, T6, T7>() where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent where T6 : class, IComponent where T7 : class, IComponent
+        {
+            return (m_Archetypes[m_ArchetypeIndex].Item2[m_ArchetypePosition],
+                Get<T1>(m_ColumnIndices[0]),
+                Get<T2>(m_ColumnIndices[1]),
+                Get<T3>(m_ColumnIndices[2]),
+                Get<T4>(m_ColumnIndices[3]),
+                Get<T5>(m_ColumnIndices[4]),
+                Get<T6>(m_ColumnIndices[5]),
+                Get<T7>(m_ColumnIndices[6]));
         }
 
         private T? Get<T>(int columnIndice) where T : class, IComponent

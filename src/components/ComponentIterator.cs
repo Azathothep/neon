@@ -79,4 +79,11 @@ namespace neon
 
         protected override IQueryIterator CreateInternal((Archetype, List<EntityID>)[] archetypes) => new QueryIterator<T1, T2, T3, T4, T5, T6>(archetypes, m_IncludeInactive);
     }
+
+    public class ComponentIterator<T1, T2, T3, T4, T5, T6, T7> : ComponentIterator where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent where T6 : class, IComponent where T7 : class, IComponent
+    {
+        public ComponentIterator(Func<(Archetype, List<EntityID>)[]> requestArchetypes, bool includeInactive) : base(requestArchetypes, includeInactive) { }
+
+        protected override IQueryIterator CreateInternal((Archetype, List<EntityID>)[] archetypes) => new QueryIterator<T1, T2, T3, T4, T5, T6, T7>(archetypes, m_IncludeInactive);
+    }
 }

@@ -122,9 +122,9 @@ namespace neon
 
     public class Query<T1, T2, T3, T4, T5, T6> : Query where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent where T6 : class, IComponent
     {
-        public Query(bool includeInactive = false) : base(new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>(), Components.GetID<T4>(), Components.GetID<T5>() }, includeInactive) { }
+        public Query(bool includeInactive = false) : base(new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>(), Components.GetID<T4>(), Components.GetID<T5>(), Components.GetID<T6>() }, includeInactive) { }
 
-        public Query(IQueryFilter[] filters, bool includeInactive = false) : base(new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>(), Components.GetID<T4>(), Components.GetID<T5>() }, filters, includeInactive) { }
+        public Query(IQueryFilter[] filters, bool includeInactive = false) : base(new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>(), Components.GetID<T4>(), Components.GetID<T5>(), Components.GetID<T6>() }, filters, includeInactive) { }
 
         protected override IQueryFilter[] MakeFilters()
         {
@@ -143,6 +143,33 @@ namespace neon
         protected override bool EqualsType(object obj)
         {
             return obj is Query<T1, T2, T3, T4, T5, T6>;
+        }
+    }
+
+       public class Query<T1, T2, T3, T4, T5, T6, T7> : Query where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent where T6 : class, IComponent where T7 : class, IComponent
+    {
+        public Query(bool includeInactive = false) : base(new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>(), Components.GetID<T4>(), Components.GetID<T5>(), Components.GetID<T6>(), Components.GetID<T7>() }, includeInactive) { }
+
+        public Query(IQueryFilter[] filters, bool includeInactive = false) : base(new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>(), Components.GetID<T4>(), Components.GetID<T5>(), Components.GetID<T6>(), Components.GetID<T7>() }, filters, includeInactive) { }
+
+        protected override IQueryFilter[] MakeFilters()
+        {
+            IQueryFilter[] queryFilters = new IQueryFilter[7];
+
+            queryFilters[0] = new QueryFilter<T1>(FilterTerm.Has);
+            queryFilters[1] = new QueryFilter<T2>(FilterTerm.Has);
+            queryFilters[2] = new QueryFilter<T3>(FilterTerm.Has);
+            queryFilters[3] = new QueryFilter<T4>(FilterTerm.Has);
+            queryFilters[4] = new QueryFilter<T5>(FilterTerm.Has);
+            queryFilters[5] = new QueryFilter<T6>(FilterTerm.Has);
+            queryFilters[6] = new QueryFilter<T7>(FilterTerm.Has);
+
+            return queryFilters.ToArray();
+        }
+
+        protected override bool EqualsType(object obj)
+        {
+            return obj is Query<T1, T2, T3, T4, T5, T6, T7>;
         }
     }
 

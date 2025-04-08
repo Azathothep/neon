@@ -65,6 +65,15 @@ namespace neon
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 	}
 
+    public class QueryResult<T1, T2, T3, T4, T5, T6, T7> : QueryResult, IEnumerable<(EntityID, T1, T2, T3, T4, T5, T6, T7)> where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent where T6 : class, IComponent where T7 : class, IComponent
+    {
+        public QueryResult(IComponentIterator iterableQuery, QueryResultMode mode = QueryResultMode.Safe) : base(iterableQuery, mode) { }
+
+        public IEnumerator<(EntityID, T1, T2, T3, T4, T5, T6, T7)> GetEnumerator() => GetEnumerator<(EntityID, T1, T2, T3, T4, T5, T6, T7)>();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+	}
+
     public abstract class QueryResult : IQueryResult
     {
         protected bool m_IsDirty = true; // Dirty when component changes

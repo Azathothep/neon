@@ -83,5 +83,16 @@ namespace neon
                 }
             );
         }
+
+        public static IEnumerable<(EntityID, T1, T2, T3, T4, T5, T6, T7)> Get<T1, T2, T3, T4, T5, T6, T7>(Query<T1, T2, T3, T4, T5, T6, T7> query, QueryType queryType, QueryResultMode mode = QueryResultMode.Safe) where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent where T6 : class, IComponent where T7 : class, IComponent
+        {
+            return (IEnumerable<(EntityID, T1, T2, T3, T4, T5, T6, T7)>)
+                storage.Get(query, queryType, (provider) =>
+                {
+                    IComponentIterator iterator = provider.Get<T1, T2, T3, T4, T5, T6, T7>(query, queryType);
+                    return new QueryResult<T1, T2, T3, T4, T5, T6, T7>(iterator, mode);
+                }
+            );
+        }
     }
 }
