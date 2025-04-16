@@ -38,6 +38,10 @@
 
             QueryBuilder.SetStorage(queryStorage);
 
+            // Systems
+
+            Systems.Initialize();
+
             // Architecture
 
             Architecture architecture = new Architecture()
