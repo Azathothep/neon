@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace neon
 {
-    public class Systems
+    public static class Systems
     {
         private class InternalStorage {
             public SystemStorage<IUpdateSystem> Update = new();
@@ -11,8 +11,6 @@ namespace neon
         }
 
         private static InternalStorage storage;
-
-        private Systems() { }
 
         public static void Initialize() {
             storage = new();

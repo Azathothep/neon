@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.Reflection;
 
 namespace neon {
-    public class SystemStorage<T> where T : IGameSystem
+    internal class SystemStorage<T> where T : IGameSystem
     {
         private class OrderTree {
             private class Node {
