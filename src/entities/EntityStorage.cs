@@ -40,7 +40,10 @@ namespace neon
 
             m_EntityIDs.Add(newEntityID);
 
-            Debug.WriteLine($"New entity created with id {id}");
+            if (isComponent)
+                Debug.WriteLine($"New component entity created with id {id}");
+            else
+                Debug.WriteLine($"New entity created with id {id}");
 
             return newEntityID;
         }

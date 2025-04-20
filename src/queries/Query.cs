@@ -196,8 +196,6 @@ namespace neon
             m_ReturnValues = returnValues;
             m_Filters = ProcessFilters(filters);
             m_IncludeInactive = includeInactive;
-
-            Debug.WriteLine($"New query created with hashCode: {this.GetHashCode()}");
         }
 
         protected abstract IQueryFilter[] MakeFilters();
