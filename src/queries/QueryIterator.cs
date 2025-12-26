@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace neon
 {
-    public class QueryIterator<T> : QueryIterator, IEnumerator<(EntityID, T?)> where T : class, IComponent
+    public class QueryIterator<T> : QueryIterator, IEnumerator<(EntityID, T?)> where T : Component
     {
         public QueryIterator((Archetype, List<EntityID>)[] archetypes, bool includeInactive) : base(archetypes, new ComponentID[] { Components.GetID<T>() }, includeInactive)
         { }
@@ -20,7 +20,7 @@ namespace neon
         object IEnumerator.Current => Current;
     }
 
-    public class QueryIterator<T1, T2> : QueryIterator, IEnumerator<(EntityID, T1?, T2?)> where T1 : class, IComponent where T2 : class, IComponent
+    public class QueryIterator<T1, T2> : QueryIterator, IEnumerator<(EntityID, T1?, T2?)> where T1 : Component where T2 : Component
     {
         public QueryIterator((Archetype, List<EntityID>)[] archetypes, bool includeInactive) : base(archetypes, new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>() }, includeInactive)
         { }
@@ -30,7 +30,7 @@ namespace neon
         object IEnumerator.Current => Current;
     }
 
-    public class QueryIterator<T1, T2, T3> : QueryIterator, IEnumerator<(EntityID, T1?, T2?, T3?)> where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent
+    public class QueryIterator<T1, T2, T3> : QueryIterator, IEnumerator<(EntityID, T1?, T2?, T3?)> where T1 : Component where T2 : Component where T3 : Component
     {
         public QueryIterator((Archetype, List<EntityID>)[] archetypes, bool includeInactive) : base(archetypes, new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>() }, includeInactive)
         { }
@@ -40,7 +40,7 @@ namespace neon
         object IEnumerator.Current => Current;
     }
 
-    public class QueryIterator<T1, T2, T3, T4> : QueryIterator, IEnumerator<(EntityID, T1?, T2?, T3?, T4?)> where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent
+    public class QueryIterator<T1, T2, T3, T4> : QueryIterator, IEnumerator<(EntityID, T1?, T2?, T3?, T4?)> where T1 : Component where T2 : Component where T3 : Component where T4 : Component
     {
         public QueryIterator((Archetype, List<EntityID>)[] archetypes, bool includeInactive) : base(archetypes, new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>(), Components.GetID<T4>() }, includeInactive)
         { }
@@ -50,7 +50,7 @@ namespace neon
         object IEnumerator.Current => Current;
     }
 
-    public class QueryIterator<T1, T2, T3, T4, T5> : QueryIterator, IEnumerator<(EntityID, T1?, T2?, T3?, T4?, T5?)> where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent
+    public class QueryIterator<T1, T2, T3, T4, T5> : QueryIterator, IEnumerator<(EntityID, T1?, T2?, T3?, T4?, T5?)> where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component
     {
         public QueryIterator((Archetype, List<EntityID>)[] archetypes, bool includeInactive) : base(archetypes, new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>(), Components.GetID<T4>(), Components.GetID<T5>() }, includeInactive)
         { }
@@ -60,7 +60,7 @@ namespace neon
         object IEnumerator.Current => Current;
     }
 
-    public class QueryIterator<T1, T2, T3, T4, T5, T6> : QueryIterator, IEnumerator<(EntityID, T1?, T2?, T3?, T4?, T5?, T6?)> where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent where T6 : class, IComponent
+    public class QueryIterator<T1, T2, T3, T4, T5, T6> : QueryIterator, IEnumerator<(EntityID, T1?, T2?, T3?, T4?, T5?, T6?)> where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component where T6 : Component
     {
         public QueryIterator((Archetype, List<EntityID>)[] archetypes, bool includeInactive) : base(archetypes, new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>(), Components.GetID<T4>(), Components.GetID<T5>(), Components.GetID<T6>() }, includeInactive)
         { }
@@ -70,7 +70,7 @@ namespace neon
         object IEnumerator.Current => Current;
     }
 
-    public class QueryIterator<T1, T2, T3, T4, T5, T6, T7> : QueryIterator, IEnumerator<(EntityID, T1?, T2?, T3?, T4?, T5?, T6?, T7?)> where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent where T6 : class, IComponent where T7 : class, IComponent
+    public class QueryIterator<T1, T2, T3, T4, T5, T6, T7> : QueryIterator, IEnumerator<(EntityID, T1?, T2?, T3?, T4?, T5?, T6?, T7?)> where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component where T6 : Component where T7 : Component
     {
         public QueryIterator((Archetype, List<EntityID>)[] archetypes, bool includeInactive) : base(archetypes, new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>(), Components.GetID<T4>(), Components.GetID<T5>(), Components.GetID<T6>(), Components.GetID<T7>() }, includeInactive)
         { }
@@ -150,20 +150,20 @@ namespace neon
             m_ArchetypePosition = -1;
         }
 
-        protected (EntityID, T1?) GetCurrentResult<T1>() where T1 : class, IComponent
+        protected (EntityID, T1?) GetCurrentResult<T1>() where T1 : Component
         {
             return (m_Archetypes[m_ArchetypeIndex].Item2[m_ArchetypePosition],
                 Get<T1>(m_ColumnIndices[0]));
         }
 
-        protected (EntityID, T1?, T2?) GetCurrentResult<T1, T2>() where T1 : class, IComponent where T2 : class, IComponent
+        protected (EntityID, T1?, T2?) GetCurrentResult<T1, T2>() where T1 : Component where T2 : Component
         {
             return (m_Archetypes[m_ArchetypeIndex].Item2[m_ArchetypePosition],
                 Get<T1>(m_ColumnIndices[0]),
                 Get<T2>(m_ColumnIndices[1]));
         }
 
-        protected (EntityID, T1?, T2?, T3?) GetCurrentResult<T1, T2, T3>() where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent
+        protected (EntityID, T1?, T2?, T3?) GetCurrentResult<T1, T2, T3>() where T1 : Component where T2 : Component where T3 : Component
         {
             return (m_Archetypes[m_ArchetypeIndex].Item2[m_ArchetypePosition],
                 Get<T1>(m_ColumnIndices[0]),
@@ -171,7 +171,7 @@ namespace neon
                 Get<T3>(m_ColumnIndices[2]));
         }
 
-        protected (EntityID, T1?, T2?, T3?, T4?) GetCurrentResult<T1, T2, T3, T4>() where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent
+        protected (EntityID, T1?, T2?, T3?, T4?) GetCurrentResult<T1, T2, T3, T4>() where T1 : Component where T2 : Component where T3 : Component where T4 : Component
         {
             return (m_Archetypes[m_ArchetypeIndex].Item2[m_ArchetypePosition],
                 Get<T1>(m_ColumnIndices[0]),
@@ -180,7 +180,7 @@ namespace neon
                 Get<T4>(m_ColumnIndices[3]));
         }
 
-        protected (EntityID, T1?, T2?, T3?, T4?, T5?) GetCurrentResult<T1, T2, T3, T4, T5>() where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent
+        protected (EntityID, T1?, T2?, T3?, T4?, T5?) GetCurrentResult<T1, T2, T3, T4, T5>() where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component
         {
             return (m_Archetypes[m_ArchetypeIndex].Item2[m_ArchetypePosition],
                 Get<T1>(m_ColumnIndices[0]),
@@ -190,7 +190,7 @@ namespace neon
                 Get<T5>(m_ColumnIndices[4]));
         }
 
-        protected (EntityID, T1?, T2?, T3?, T4?, T5?, T6?) GetCurrentResult<T1, T2, T3, T4, T5, T6>() where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent where T6 : class, IComponent
+        protected (EntityID, T1?, T2?, T3?, T4?, T5?, T6?) GetCurrentResult<T1, T2, T3, T4, T5, T6>() where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component where T6 : Component
         {
             return (m_Archetypes[m_ArchetypeIndex].Item2[m_ArchetypePosition],
                 Get<T1>(m_ColumnIndices[0]),
@@ -201,7 +201,7 @@ namespace neon
                 Get<T6>(m_ColumnIndices[5]));
         }
 
-        protected (EntityID, T1?, T2?, T3?, T4?, T5?, T6?, T7?) GetCurrentResult<T1, T2, T3, T4, T5, T6, T7>() where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent where T6 : class, IComponent where T7 : class, IComponent
+        protected (EntityID, T1?, T2?, T3?, T4?, T5?, T6?, T7?) GetCurrentResult<T1, T2, T3, T4, T5, T6, T7>() where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component where T6 : Component where T7 : Component
         {
             return (m_Archetypes[m_ArchetypeIndex].Item2[m_ArchetypePosition],
                 Get<T1>(m_ColumnIndices[0]),
@@ -213,7 +213,7 @@ namespace neon
                 Get<T7>(m_ColumnIndices[6]));
         }
 
-        private T? Get<T>(int columnIndice) where T : class, IComponent
+        private T? Get<T>(int columnIndice) where T : Component
         {
             if (columnIndice < 0)
                 return null;

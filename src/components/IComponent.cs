@@ -1,9 +1,10 @@
 ﻿namespace neon
 {
-    public interface IComponent
+    public abstract class Component
     {
-        public EntityID EntityID { get; }
+        public EntityID EntityID => m_EntityID;
+        private EntityID m_EntityID = Entities.GetID(true);
 
-        public IComponent Clone();
+        public abstract Component Clone();
     }
 }

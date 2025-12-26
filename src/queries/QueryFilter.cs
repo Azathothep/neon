@@ -11,7 +11,7 @@ namespace neon
         MightHave
     }
 
-    public struct QueryFilter<T> : IQueryFilter where T : class, IComponent
+    public struct QueryFilter<T> : IQueryFilter where T : Component
     {
         private FilterTerm m_Term;
         public FilterTerm Term => m_Term;

@@ -31,7 +31,7 @@ namespace neon
         {
             public Dictionary<EntityID, EntityID> ModelToCopy = new();
             public Dictionary<Type, MemberInfo[]> DependencyMembers = new();
-            public Dictionary<IComponent, EntityID[]> Dependencies = new();
+            public Dictionary<Component, EntityID[]> Dependencies = new();
 
             public CopyArchitect() { }
         }
@@ -69,11 +69,11 @@ namespace neon
 
             entityCopy.active = entityModel.active;
 
-            IComponent[] componentModels = entityModel.GetAll();
+            Component[] componentModels = entityModel.GetAll();
 
             foreach (var componentModel in componentModels)
             {
-                IComponent componentCopy = Components.Add(entityCopy, componentModel, componentModel.GetType());
+                Component componentCopy = Components.Add(entityCopy, componentModel, componentModel.GetType());
 
                 copyArchitect.ModelToCopy.Add(componentModel.EntityID, componentCopy.EntityID);
 
@@ -85,7 +85,7 @@ namespace neon
             return entityCopy;
         }
 
-        private static void RegisterDependencies(IComponent component, CopyArchitect copyArchitect)
+        private static void RegisterDependencies(Component component, CopyArchitect copyArchitect)
         {
             Type componentType = component.GetType();
             MemberInfo[] memberDependencies;
@@ -106,15 +106,15 @@ namespace neon
                     {
                         if (field.FieldType == typeof(EntityID))
                             entityDependencies[i] = (EntityID)field.GetValue(component);
-                        else if (typeof(IComponent).IsAssignableFrom(field.FieldType))
-                            entityDependencies[i] = ((IComponent)field.GetValue(component)).EntityID;
+                        else if (typeof(Component).IsAssignableFrom(field.FieldType))
+                            entityDependencies[i] = ((Component)field.GetValue(component)).EntityID;
                     }
                     else if (memberDependencies[i] is PropertyInfo property)
                     {
                         if (property.PropertyType == typeof(EntityID))
                             entityDependencies[i] = (EntityID)property.GetValue(component);
-                        else if (typeof(IComponent).IsAssignableFrom(property.PropertyType))
-                            entityDependencies[i] = ((IComponent)property.GetValue(component)).EntityID;
+                        else if (typeof(Component).IsAssignableFrom(property.PropertyType))
+                            entityDependencies[i] = ((Component)property.GetValue(component)).EntityID;
                     }
                 }
 
@@ -128,12 +128,12 @@ namespace neon
 
             MemberInfo[] fieldDependencies = type.GetFields(flags).Where(d => {
                 Type fieldType = d.FieldType;
-                return fieldType == typeof(EntityID) || typeof(IComponent).IsAssignableFrom(fieldType);
+                return fieldType == typeof(EntityID) || typeof(Component).IsAssignableFrom(fieldType);
             }).ToArray();
 
             MemberInfo[] propertyDependencies = type.GetProperties(flags).Where(d => {
                 Type propertyType = d.PropertyType;
-                return d.CanWrite && propertyType == typeof(EntityID) || typeof(IComponent).IsAssignableFrom(propertyType);
+                return d.CanWrite && propertyType == typeof(EntityID) || typeof(Component).IsAssignableFrom(propertyType);
             }).ToArray();
 
             return fieldDependencies.Concat(propertyDependencies).ToArray();
@@ -147,7 +147,7 @@ namespace neon
             }
         }
 
-        private static void ResolveObjectDependency(IComponent component, EntityID[] references, CopyArchitect copyArchitect)
+        private static void ResolveObjectDependency(Component component, EntityID[] references, CopyArchitect copyArchitect)
         {
             Type componentType = component.GetType();
 
@@ -162,16 +162,16 @@ namespace neon
 
                 if (memberType == typeof(EntityID))
                     ResolveDependency(memberInfos[i], component, copyReference);
-                else if (typeof(IComponent).IsAssignableFrom(memberType))
+                else if (typeof(Component).IsAssignableFrom(memberType))
                 {
-                    IComponent componentToAssign = copyReference.GetParent().GetComponentOfEntityID(copyReference);
+                    Component componentToAssign = copyReference.GetParent().GetComponentOfEntityID(copyReference);
 
                     ResolveDependency(memberInfos[i], component, componentToAssign);
                 }
             }
         }
 
-        private static void ResolveDependency(MemberInfo memberInfo, IComponent component, object copyReference)
+        private static void ResolveDependency(MemberInfo memberInfo, Component component, object copyReference)
         {
             if (memberInfo is FieldInfo field)
                 field.SetValue(component, copyReference);

@@ -4,7 +4,7 @@ using System.Data.Common;
 
 namespace neon
 {
-    using Column = List<IComponent>;
+    using Column = List<Component>;
 
     public struct ArchetypeEdges
     {
@@ -45,7 +45,7 @@ namespace neon
             m_DisabledEndIndex = -1;
         }
 
-        public int AddEntity(List<IComponent> components)
+        public int AddEntity(List<Component> components)
         {
             if (components.Count != m_Columns.Count)
             {
@@ -60,9 +60,9 @@ namespace neon
             return m_Columns[0].Count - 1;
         }
 
-        public List<IComponent> RemoveEntity(int row)
+        public List<Component> RemoveEntity(int row)
         {
-            List<IComponent> components = new List<IComponent>();
+            List<Component> components = new List<Component>();
             int maxIndex = m_Columns[0].Count - 1;
 
             for (int i = 0; i < m_Columns.Count; i++)
@@ -100,7 +100,7 @@ namespace neon
         {
             for (int i = 0; i < m_Columns.Count; i++)
             {
-                IComponent temp = m_Columns[i][row1];
+                Component temp = m_Columns[i][row1];
                 m_Columns[i][row1] = m_Columns[i][row2];
                 m_Columns[i][row2] = temp;
             }

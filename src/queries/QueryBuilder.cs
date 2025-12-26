@@ -18,7 +18,7 @@ namespace neon
             QueryBuilder.storage = storage;
         }
 
-        public static IEnumerable<(EntityID, T1)> Get<T1>(Query<T1> query, QueryType queryType, QueryResultMode mode = QueryResultMode.Safe) where T1 : class, IComponent
+        public static IEnumerable<(EntityID, T1)> Get<T1>(Query<T1> query, QueryType queryType, QueryResultMode mode = QueryResultMode.Safe) where T1 : Component
         {
             return (IEnumerable<(EntityID, T1)>)
                 storage.Get(query, queryType, (provider) =>
@@ -29,7 +29,7 @@ namespace neon
             );
         }
 
-        public static IEnumerable<(EntityID, T1, T2)> Get<T1, T2>(Query<T1, T2> query, QueryType queryType, QueryResultMode mode = QueryResultMode.Safe) where T1 : class, IComponent where T2 : class, IComponent
+        public static IEnumerable<(EntityID, T1, T2)> Get<T1, T2>(Query<T1, T2> query, QueryType queryType, QueryResultMode mode = QueryResultMode.Safe) where T1 : Component where T2 : Component
         {
             return (IEnumerable<(EntityID, T1, T2)>)
                 storage.Get(query, queryType, (provider) =>
@@ -40,7 +40,7 @@ namespace neon
             );
         }
 
-        public static IEnumerable<(EntityID, T1, T2, T3)> Get<T1, T2, T3>(Query<T1, T2, T3> query, QueryType queryType, QueryResultMode mode = QueryResultMode.Safe) where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent
+        public static IEnumerable<(EntityID, T1, T2, T3)> Get<T1, T2, T3>(Query<T1, T2, T3> query, QueryType queryType, QueryResultMode mode = QueryResultMode.Safe) where T1 : Component where T2 : Component where T3 : Component
         {
             return (IEnumerable<(EntityID, T1, T2, T3)>)
                 storage.Get(query, queryType, (provider) =>
@@ -51,7 +51,7 @@ namespace neon
             );
         }
 
-        public static IEnumerable<(EntityID, T1, T2, T3, T4)> Get<T1, T2, T3, T4>(Query<T1, T2, T3, T4> query, QueryType queryType, QueryResultMode mode = QueryResultMode.Safe) where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent
+        public static IEnumerable<(EntityID, T1, T2, T3, T4)> Get<T1, T2, T3, T4>(Query<T1, T2, T3, T4> query, QueryType queryType, QueryResultMode mode = QueryResultMode.Safe) where T1 : Component where T2 : Component where T3 : Component where T4 : Component
         {
             return (IEnumerable<(EntityID, T1, T2, T3, T4)>)
                 storage.Get(query, queryType, (provider) =>
@@ -62,7 +62,7 @@ namespace neon
             );
         }
 
-        public static IEnumerable<(EntityID, T1, T2, T3, T4, T5)> Get<T1, T2, T3, T4, T5>(Query<T1, T2, T3, T4, T5> query, QueryType queryType, QueryResultMode mode = QueryResultMode.Safe) where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent
+        public static IEnumerable<(EntityID, T1, T2, T3, T4, T5)> Get<T1, T2, T3, T4, T5>(Query<T1, T2, T3, T4, T5> query, QueryType queryType, QueryResultMode mode = QueryResultMode.Safe) where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component
         {
             return (IEnumerable<(EntityID, T1, T2, T3, T4, T5)>)
                 storage.Get(query, queryType, (provider) =>
@@ -73,7 +73,7 @@ namespace neon
             );
         }
 
-        public static IEnumerable<(EntityID, T1, T2, T3, T4, T5, T6)> Get<T1, T2, T3, T4, T5, T6>(Query<T1, T2, T3, T4, T5, T6> query, QueryType queryType, QueryResultMode mode = QueryResultMode.Safe) where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent where T6 : class, IComponent
+        public static IEnumerable<(EntityID, T1, T2, T3, T4, T5, T6)> Get<T1, T2, T3, T4, T5, T6>(Query<T1, T2, T3, T4, T5, T6> query, QueryType queryType, QueryResultMode mode = QueryResultMode.Safe) where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component where T6 : Component
         {
             return (IEnumerable<(EntityID, T1, T2, T3, T4, T5, T6)>)
                 storage.Get(query, queryType, (provider) =>
@@ -84,7 +84,7 @@ namespace neon
             );
         }
 
-        public static IEnumerable<(EntityID, T1, T2, T3, T4, T5, T6, T7)> Get<T1, T2, T3, T4, T5, T6, T7>(Query<T1, T2, T3, T4, T5, T6, T7> query, QueryType queryType, QueryResultMode mode = QueryResultMode.Safe) where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent where T6 : class, IComponent where T7 : class, IComponent
+        public static IEnumerable<(EntityID, T1, T2, T3, T4, T5, T6, T7)> Get<T1, T2, T3, T4, T5, T6, T7>(Query<T1, T2, T3, T4, T5, T6, T7> query, QueryType queryType, QueryResultMode mode = QueryResultMode.Safe) where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component where T6 : Component where T7 : Component
         {
             return (IEnumerable<(EntityID, T1, T2, T3, T4, T5, T6, T7)>)
                 storage.Get(query, queryType, (provider) =>

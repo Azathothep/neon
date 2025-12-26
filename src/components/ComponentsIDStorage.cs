@@ -23,7 +23,7 @@ namespace neon
             return idStorage.IDToComponent[component];
         }
 
-        public static ComponentID GetID<T>() where T : class, IComponent
+        public static ComponentID GetID<T>() where T : Component
         {
             Type componentType = typeof(T);
 
@@ -32,7 +32,7 @@ namespace neon
 
         public static ComponentID GetIDByType(Type componentType)
         {
-            if (componentType.IsAssignableFrom(typeof(IComponent)))
+            if (componentType.IsAssignableFrom(typeof(Component)))
                 return null;
 
             return GetIDByTypeUnsafe(componentType);

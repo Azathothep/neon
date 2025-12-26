@@ -11,7 +11,7 @@ namespace neon
         Unsafe
     }
 
-    public class QueryResult<T> : QueryResult, IEnumerable<(EntityID, T)> where T : class, IComponent
+    public class QueryResult<T> : QueryResult, IEnumerable<(EntityID, T)> where T : Component
     {
         public QueryResult(IComponentIterator iterableQuery, QueryResultMode mode = QueryResultMode.Safe) : base(iterableQuery, mode) { }
 
@@ -20,7 +20,7 @@ namespace neon
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
-    public class QueryResult<T1, T2> : QueryResult, IEnumerable<(EntityID, T1, T2)> where T1 : class, IComponent where T2 : class, IComponent
+    public class QueryResult<T1, T2> : QueryResult, IEnumerable<(EntityID, T1, T2)> where T1 : Component where T2 : Component
     {
         public QueryResult(IComponentIterator iterableQuery, QueryResultMode mode = QueryResultMode.Safe) : base(iterableQuery, mode) { }
 
@@ -29,7 +29,7 @@ namespace neon
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
-    public class QueryResult<T1, T2, T3> : QueryResult, IEnumerable<(EntityID, T1, T2, T3)> where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent
+    public class QueryResult<T1, T2, T3> : QueryResult, IEnumerable<(EntityID, T1, T2, T3)> where T1 : Component where T2 : Component where T3 : Component
     {
         public QueryResult(IComponentIterator iterableQuery, QueryResultMode mode = QueryResultMode.Safe) : base(iterableQuery, mode) { }
 
@@ -38,7 +38,7 @@ namespace neon
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
-    public class QueryResult<T1, T2, T3, T4> : QueryResult, IEnumerable<(EntityID, T1, T2, T3, T4)> where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent
+    public class QueryResult<T1, T2, T3, T4> : QueryResult, IEnumerable<(EntityID, T1, T2, T3, T4)> where T1 : Component where T2 : Component where T3 : Component where T4 : Component
     {
         public QueryResult(IComponentIterator iterableQuery, QueryResultMode mode = QueryResultMode.Safe) : base(iterableQuery, mode) { }
 
@@ -47,7 +47,7 @@ namespace neon
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 	}
 
-    public class QueryResult<T1, T2, T3, T4, T5> : QueryResult, IEnumerable<(EntityID, T1, T2, T3, T4, T5)> where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent
+    public class QueryResult<T1, T2, T3, T4, T5> : QueryResult, IEnumerable<(EntityID, T1, T2, T3, T4, T5)> where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component
     {
         public QueryResult(IComponentIterator iterableQuery, QueryResultMode mode = QueryResultMode.Safe) : base(iterableQuery, mode) { }
 
@@ -56,7 +56,7 @@ namespace neon
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 	}
 
-    public class QueryResult<T1, T2, T3, T4, T5, T6> : QueryResult, IEnumerable<(EntityID, T1, T2, T3, T4, T5, T6)> where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent where T6 : class, IComponent
+    public class QueryResult<T1, T2, T3, T4, T5, T6> : QueryResult, IEnumerable<(EntityID, T1, T2, T3, T4, T5, T6)> where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component where T6 : Component
     {
         public QueryResult(IComponentIterator iterableQuery, QueryResultMode mode = QueryResultMode.Safe) : base(iterableQuery, mode) { }
 
@@ -65,7 +65,7 @@ namespace neon
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 	}
 
-    public class QueryResult<T1, T2, T3, T4, T5, T6, T7> : QueryResult, IEnumerable<(EntityID, T1, T2, T3, T4, T5, T6, T7)> where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent where T6 : class, IComponent where T7 : class, IComponent
+    public class QueryResult<T1, T2, T3, T4, T5, T6, T7> : QueryResult, IEnumerable<(EntityID, T1, T2, T3, T4, T5, T6, T7)> where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component where T6 : Component where T7 : Component
     {
         public QueryResult(IComponentIterator iterableQuery, QueryResultMode mode = QueryResultMode.Safe) : base(iterableQuery, mode) { }
 

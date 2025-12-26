@@ -37,14 +37,14 @@ namespace neon
         protected abstract IQueryIterator CreateInternal((Archetype, List<EntityID>)[] archetypes);
     }
 
-    public class ComponentIterator<T> : ComponentIterator where T : class, IComponent
+    public class ComponentIterator<T> : ComponentIterator where T : Component
     {
         public ComponentIterator(Func<(Archetype, List<EntityID>)[]> requestArchetypes, bool includeInactive) : base(requestArchetypes, includeInactive) { }
 
         protected override IQueryIterator CreateInternal((Archetype, List<EntityID>)[] archetypes) => new QueryIterator<T>(archetypes, m_IncludeInactive);
     }
 
-    public class ComponentIterator<T1, T2> : ComponentIterator where T1 : class, IComponent where T2 : class, IComponent
+    public class ComponentIterator<T1, T2> : ComponentIterator where T1 : Component where T2 : Component
     {
         public ComponentIterator(Func<(Archetype, List<EntityID>)[]> requestArchetypes, bool includeInactive) : base(requestArchetypes, includeInactive) { }
 
@@ -52,35 +52,35 @@ namespace neon
 
     }
 
-    public class ComponentIterator<T1, T2, T3> : ComponentIterator where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent
+    public class ComponentIterator<T1, T2, T3> : ComponentIterator where T1 : Component where T2 : Component where T3 : Component
     {
         public ComponentIterator(Func<(Archetype, List<EntityID>)[]> requestArchetypes, bool includeInactive) : base(requestArchetypes, includeInactive) { }
 
         protected override IQueryIterator CreateInternal((Archetype, List<EntityID>)[] archetypes) => new QueryIterator<T1, T2, T3>(archetypes, m_IncludeInactive);
     }
 
-    public class ComponentIterator<T1, T2, T3, T4> : ComponentIterator where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent
+    public class ComponentIterator<T1, T2, T3, T4> : ComponentIterator where T1 : Component where T2 : Component where T3 : Component where T4 : Component
     {
         public ComponentIterator(Func<(Archetype, List<EntityID>)[]> requestArchetypes, bool includeInactive) : base(requestArchetypes, includeInactive) { }
 
         protected override IQueryIterator CreateInternal((Archetype, List<EntityID>)[] archetypes) => new QueryIterator<T1, T2, T3, T4>(archetypes, m_IncludeInactive);
     }
 
-    public class ComponentIterator<T1, T2, T3, T4, T5> : ComponentIterator where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent
+    public class ComponentIterator<T1, T2, T3, T4, T5> : ComponentIterator where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component
     {
         public ComponentIterator(Func<(Archetype, List<EntityID>)[]> requestArchetypes, bool includeInactive) : base(requestArchetypes, includeInactive) { }
 
         protected override IQueryIterator CreateInternal((Archetype, List<EntityID>)[] archetypes) => new QueryIterator<T1, T2, T3, T4, T5>(archetypes, m_IncludeInactive);
     }
 
-    public class ComponentIterator<T1, T2, T3, T4, T5, T6> : ComponentIterator where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent where T6 : class, IComponent
+    public class ComponentIterator<T1, T2, T3, T4, T5, T6> : ComponentIterator where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component where T6 : Component
     {
         public ComponentIterator(Func<(Archetype, List<EntityID>)[]> requestArchetypes, bool includeInactive) : base(requestArchetypes, includeInactive) { }
 
         protected override IQueryIterator CreateInternal((Archetype, List<EntityID>)[] archetypes) => new QueryIterator<T1, T2, T3, T4, T5, T6>(archetypes, m_IncludeInactive);
     }
 
-    public class ComponentIterator<T1, T2, T3, T4, T5, T6, T7> : ComponentIterator where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent where T6 : class, IComponent where T7 : class, IComponent
+    public class ComponentIterator<T1, T2, T3, T4, T5, T6, T7> : ComponentIterator where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component where T6 : Component where T7 : Component
     {
         public ComponentIterator(Func<(Archetype, List<EntityID>)[]> requestArchetypes, bool includeInactive) : base(requestArchetypes, includeInactive) { }
 

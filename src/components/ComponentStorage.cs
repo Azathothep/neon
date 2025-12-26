@@ -37,7 +37,7 @@ namespace neon
                 }
             }
 
-            public IComponentIterator Get<T>(IQuery query, QueryType queryType) where T : class, IComponent
+            public IComponentIterator Get<T>(IQuery query, QueryType queryType) where T : Component
             {
                 IComponentIterator iterableQuery = new ComponentIterator<T>(() => RequestArchetypes(query.Filters), query.IncludeInactive);
                 if (queryType == QueryType.Cached)
@@ -45,7 +45,7 @@ namespace neon
                 return iterableQuery;
             }
 
-            public IComponentIterator Get<T1, T2>(IQuery query, QueryType queryType) where T1 : class, IComponent where T2 : class, IComponent
+            public IComponentIterator Get<T1, T2>(IQuery query, QueryType queryType) where T1 : Component where T2 : Component
             {
                 IComponentIterator iterableQuery = new ComponentIterator<T1, T2>(() => RequestArchetypes(query.Filters), query.IncludeInactive);
                 if (queryType == QueryType.Cached)
@@ -53,7 +53,7 @@ namespace neon
                 return iterableQuery;
             }
 
-            public IComponentIterator Get<T1, T2, T3>(IQuery query, QueryType queryType) where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent
+            public IComponentIterator Get<T1, T2, T3>(IQuery query, QueryType queryType) where T1 : Component where T2 : Component where T3 : Component
             {
                 IComponentIterator iterableQuery = new ComponentIterator<T1, T2, T3>(() => RequestArchetypes(query.Filters), query.IncludeInactive);
                 if (queryType == QueryType.Cached)
@@ -61,7 +61,7 @@ namespace neon
                 return iterableQuery;
             }
 
-            public IComponentIterator Get<T1, T2, T3, T4>(IQuery query, QueryType queryType) where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent
+            public IComponentIterator Get<T1, T2, T3, T4>(IQuery query, QueryType queryType) where T1 : Component where T2 : Component where T3 : Component where T4 : Component
             {
                 IComponentIterator iterableQuery = new ComponentIterator<T1, T2, T3, T4>(() => RequestArchetypes(query.Filters), query.IncludeInactive);
                 if (queryType == QueryType.Cached)
@@ -69,7 +69,7 @@ namespace neon
                 return iterableQuery;
             }
 
-            public IComponentIterator Get<T1, T2, T3, T4, T5>(IQuery query, QueryType queryType) where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent
+            public IComponentIterator Get<T1, T2, T3, T4, T5>(IQuery query, QueryType queryType) where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component
             {
                 IComponentIterator iterableQuery = new ComponentIterator<T1, T2, T3, T4, T5>(() => RequestArchetypes(query.Filters), query.IncludeInactive);
                 if (queryType == QueryType.Cached)
@@ -77,7 +77,7 @@ namespace neon
                 return iterableQuery;
             }
 
-            public IComponentIterator Get<T1, T2, T3, T4, T5, T6>(IQuery query, QueryType queryType) where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent where T6 : class, IComponent
+            public IComponentIterator Get<T1, T2, T3, T4, T5, T6>(IQuery query, QueryType queryType) where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component where T6 : Component
             {
                 IComponentIterator iterableQuery = new ComponentIterator<T1, T2, T3, T4, T5, T6>(() => RequestArchetypes(query.Filters), query.IncludeInactive);
                 if (queryType == QueryType.Cached)
@@ -85,7 +85,7 @@ namespace neon
                 return iterableQuery;
             }
 
-            public IComponentIterator Get<T1, T2, T3, T4, T5, T6, T7>(IQuery query, QueryType queryType) where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent where T6 : class, IComponent where T7 : class, IComponent
+            public IComponentIterator Get<T1, T2, T3, T4, T5, T6, T7>(IQuery query, QueryType queryType) where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component where T6 : Component where T7 : Component
             {
                 IComponentIterator iterableQuery = new ComponentIterator<T1, T2, T3, T4, T5, T6, T7>(() => RequestArchetypes(query.Filters), query.IncludeInactive);
                 if (queryType == QueryType.Cached)
@@ -210,7 +210,7 @@ namespace neon
             Hooks.Add(EntityHook.OnDisabled, (o) => OnEntityActiveStateChanged((EntityID)o, false));
         }
 
-        public T? Get<T>(EntityID entityID) where T : class, IComponent
+        public T? Get<T>(EntityID entityID) where T : Component
         {
             ComponentID componentID = Components.GetID<T>();
 
@@ -235,18 +235,18 @@ namespace neon
             return (T)archetype.Columns[column][row];
         }
 
-		public IComponent[] GetAll(EntityID entityID)
+		public Component[] GetAll(EntityID entityID)
 		{
 			if (!m_EntityToArchetype.TryGetValue(entityID, out (Archetype, int) archetypeRecord))
 			{
-				return new IComponent[0];
+				return new Component[0];
 			}
 
 			(Archetype archetype, int rows) = archetypeRecord;
 
 			int count = archetype.Columns.Count;
 
-			IComponent[] components = new IComponent[count];
+			Component[] components = new Component[count];
 
 			for (int i = 0; i < count; i++)
 				components[i] = archetype.Columns[i][rows];
@@ -254,7 +254,7 @@ namespace neon
 			return components;
 		}
 
-        public bool Has<T>(EntityID entityID) where T : class, IComponent
+        public bool Has<T>(EntityID entityID) where T : Component
         {
             ComponentID componentID = Components.GetID<T>();
 
@@ -278,25 +278,18 @@ namespace neon
             return archetypeSet.ContainsKey(archetype.ID);
         }
 
-        public T? Add<T>(EntityID entityID, T component) where T : class, IComponent
+        public T? Add<T>(EntityID entityID, T component) where T : Component
         {
             return (T?)Add(entityID, component, typeof(T));
         }
 
-        public IComponent? Add(EntityID entityID, IComponent component, Type type)
+        public Component? Add(EntityID entityID, Component component, Type type)
         {
             Debug.WriteLine($"Adding component of type {type} to {(UInt32)entityID}");
 
-            PropertyInfo entityIDProperty = type.GetProperty("EntityID");
-
-            if (entityIDProperty == null || !entityIDProperty.CanWrite)
-                throw new Exception($"Error : component of type {type} doesn't posess a setter on EntityID property");
-
-            entityIDProperty.SetValue(component, Entities.GetID(true));
-
             component.EntityID.SetParent(entityID);
 
-            if (component.GetType().IsAssignableFrom(typeof(IComponent)))
+            if (component.GetType().IsAssignableFrom(typeof(Component)))
                 return null;
 
             ComponentID componentID = Components.GetIDByType(type);
@@ -311,7 +304,7 @@ namespace neon
 
                 Archetype archetype = GetOrCreateArchetype(componentSet);
 
-                AddEntityToArchetype(entityID, new List<IComponent> { component }, archetype);
+                AddEntityToArchetype(entityID, new List<Component> { component }, archetype);
 
                 OnComponentAdded(component, componentID);
 
@@ -328,7 +321,7 @@ namespace neon
                         // Already has this component
 
                         int column = GetColumn(componentID, archetype);
-                        IComponent previousComponent = archetype.Columns[column][row];
+                        Component previousComponent = archetype.Columns[column][row];
 
                         archetype.Columns[column][row] = component; // Replace
 
@@ -362,7 +355,7 @@ namespace neon
 
                     // Removing components from archetype, add it to the list, then to the nextArchetype & save result
 
-                    List<IComponent> components = RemoveEntityFromArchetype(entityID, archetype, row);
+                    List<Component> components = RemoveEntityFromArchetype(entityID, archetype, row);
 
                     int column = GetColumn(componentID, nextArchetype);
 
@@ -377,7 +370,7 @@ namespace neon
             return component;
         }
 
-        private void OnComponentAdded(IComponent component, ComponentID componentID)
+        private void OnComponentAdded(Component component, ComponentID componentID)
         {
             if (component is IAwakable awakable)
                 awakable.Awake();
@@ -385,7 +378,7 @@ namespace neon
             Trigger(ComponentHook.OnAdded, componentID, component.GetType(), component.EntityID);
         }
 
-        public void Remove<T>(EntityID entityID) where T : class, IComponent
+        public void Remove<T>(EntityID entityID) where T : Component
         {
             ComponentID componentID = Components.GetID<T>();
 
@@ -405,7 +398,7 @@ namespace neon
             // if archetype contains only 1 (this) component
             if (archetype.ComponentSet.ComponentIDs.Count == 1)
             {
-                IComponent component = RemoveEntityFromArchetype(entityID, archetype, row)[0];
+                Component component = RemoveEntityFromArchetype(entityID, archetype, row)[0];
                 m_EntityToArchetype.Remove(entityID);
                 Destroy(component);
 
@@ -434,11 +427,11 @@ namespace neon
 
             // Removing component from archetype & list, then adding it to nextArchetype & save result
             {
-                List<IComponent> components = RemoveEntityFromArchetype(entityID, archetype, row);
+                List<Component> components = RemoveEntityFromArchetype(entityID, archetype, row);
 
                 int column = GetColumn(componentID, archetype);
 
-                IComponent component = components[column];
+                Component component = components[column];
 
                 components.RemoveAt(column); // This will remove the component set at column
 
@@ -458,7 +451,7 @@ namespace neon
             Archetype archetype = value.Item1;
             int row = value.Item2;
 
-            List<IComponent> components = RemoveEntityFromArchetype(entityID, archetype, row);
+            List<Component> components = RemoveEntityFromArchetype(entityID, archetype, row);
 
             for (int i = 0; i < components.Count; i++)
             {
@@ -531,7 +524,7 @@ namespace neon
             return archetype;
         }
 
-        private void AddEntityToArchetype(EntityID entityID, List<IComponent> components, Archetype archetype)
+        private void AddEntityToArchetype(EntityID entityID, List<Component> components, Archetype archetype)
         {
             int row = archetype.AddEntity(components);
 
@@ -551,9 +544,9 @@ namespace neon
             }
         }
 
-        private List<IComponent> RemoveEntityFromArchetype(EntityID entityID, Archetype archetype, int row)
+        private List<Component> RemoveEntityFromArchetype(EntityID entityID, Archetype archetype, int row)
         {
-            List<IComponent> components = archetype.RemoveEntity(row);
+            List<Component> components = archetype.RemoveEntity(row);
 
             List<EntityID> entities = m_ArchetypeToEntities[archetype.ID];
             int maxIndex = entities.Count - 1;
@@ -572,9 +565,9 @@ namespace neon
             return components;
         }
 
-        public EntityID GetOwner<T>(T component) where T : class, IComponent => component.EntityID.GetParent();
+        public EntityID GetOwner<T>(T component) where T : Component => component.EntityID.GetParent();
 
-        private void Destroy(IComponent component)
+        private void Destroy(Component component)
         {
             Entities.Destroy(component.EntityID);
         }
@@ -604,7 +597,7 @@ namespace neon
             }
         }
 
-        public T[] GetInChildren<T>(EntityID entityID, bool propagate = false) where T : class, IComponent
+        public T[] GetInChildren<T>(EntityID entityID, bool propagate = false) where T : Component
         {
             List<T> components = new List<T>();
 
@@ -623,7 +616,7 @@ namespace neon
             return components.ToArray();
         }
 
-        public T[] GetInParents<T>(EntityID entityID) where T : class, IComponent
+        public T[] GetInParents<T>(EntityID entityID) where T : Component
         {
             List<T> components = new List<T>();
 

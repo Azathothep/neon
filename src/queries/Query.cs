@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace neon
 {
-    public class Query<T1> : Query where T1 : class, IComponent
+    public class Query<T1> : Query where T1 : Component
     {
         public Query(bool includeInactive = false) : base(new ComponentID[] { Components.GetID<T1>() }, includeInactive) { }
 
@@ -26,7 +26,7 @@ namespace neon
         }
     }
 
-    public class Query<T1, T2> : Query where T1 : class, IComponent where T2 : class, IComponent
+    public class Query<T1, T2> : Query where T1 : Component where T2 : Component
     {
         public Query(bool includeInactive = false) : base(new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>() }, includeInactive) { }
 
@@ -48,7 +48,7 @@ namespace neon
         }
     }
 
-    public class Query<T1, T2, T3> : Query where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent
+    public class Query<T1, T2, T3> : Query where T1 : Component where T2 : Component where T3 : Component
     {
         public Query(bool includeInactive = false) : base(new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>() }, includeInactive) { }
 
@@ -71,7 +71,7 @@ namespace neon
         }
     }
 
-    public class Query<T1, T2, T3, T4> : Query where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent
+    public class Query<T1, T2, T3, T4> : Query where T1 : Component where T2 : Component where T3 : Component where T4 : Component
     {
         public Query(bool includeInactive = false) : base(new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>(), Components.GetID<T4>() }, includeInactive) { }
 
@@ -95,7 +95,7 @@ namespace neon
         }
     }
 
-    public class Query<T1, T2, T3, T4, T5> : Query where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent
+    public class Query<T1, T2, T3, T4, T5> : Query where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component
     {
         public Query(bool includeInactive = false) : base(new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>(), Components.GetID<T4>(), Components.GetID<T5>() }, includeInactive) { }
 
@@ -120,7 +120,7 @@ namespace neon
         }
     }
 
-    public class Query<T1, T2, T3, T4, T5, T6> : Query where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent where T6 : class, IComponent
+    public class Query<T1, T2, T3, T4, T5, T6> : Query where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component where T6 : Component
     {
         public Query(bool includeInactive = false) : base(new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>(), Components.GetID<T4>(), Components.GetID<T5>(), Components.GetID<T6>() }, includeInactive) { }
 
@@ -146,7 +146,7 @@ namespace neon
         }
     }
 
-       public class Query<T1, T2, T3, T4, T5, T6, T7> : Query where T1 : class, IComponent where T2 : class, IComponent where T3 : class, IComponent where T4 : class, IComponent where T5 : class, IComponent where T6 : class, IComponent where T7 : class, IComponent
+       public class Query<T1, T2, T3, T4, T5, T6, T7> : Query where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component where T6 : Component where T7 : Component
     {
         public Query(bool includeInactive = false) : base(new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>(), Components.GetID<T4>(), Components.GetID<T5>(), Components.GetID<T6>(), Components.GetID<T7>() }, includeInactive) { }
 
