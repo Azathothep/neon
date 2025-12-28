@@ -16,9 +16,9 @@ namespace neon
             storage = new();
         }
 
-        public static void Add(IGameSystem gameSystem)
+        public static void Add(ISystem system)
         {
-            Type type = gameSystem.GetType();
+            Type type = system.GetType();
             bool unique = type.GetCustomAttribute<AllowMultipleAttribute>() == null;
 
             if (unique && (storage.Update.Systems.FirstOrDefault(s => s.GetType() == type) != null
@@ -28,28 +28,28 @@ namespace neon
                 return;
             }
 
-            if (gameSystem is IUpdateSystem updateSystem)
+            if (system is IUpdateSystem updateSystem)
                 storage.Update.Add(updateSystem);
 
-            if (gameSystem is IDrawSystem drawSystem)
+            if (system is IDrawSystem drawSystem)
                 storage.Draw.Add(drawSystem);
         
         }
 
-        public static void Remove(IGameSystem gameSystem)
+        public static void Remove(ISystem system)
         {
-            if (gameSystem is IUpdateSystem updateSystem)
+            if (system is IUpdateSystem updateSystem)
                 storage.Update.Remove(updateSystem);
 
-            if (gameSystem is IDrawSystem drawSystem)
+            if (system is IDrawSystem drawSystem)
                 storage.Draw.Remove(drawSystem);
         }
 
-        public static IGameSystem[] GetLoadedSystems()
+        public static ISystem[] GetLoadedSystems()
         {
-            List<IGameSystem> gameSystems = [.. storage.Update.Systems];
+            List<ISystem> gameSystems = [.. storage.Update.Systems];
 
-            foreach (IGameSystem system in storage.Draw.Systems)
+            foreach (ISystem system in storage.Draw.Systems)
             {
                 if (gameSystems.Contains(system))
                     continue;

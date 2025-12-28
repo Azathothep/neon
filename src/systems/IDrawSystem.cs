@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace neon
 {
-    public interface IDrawSystem : IGameSystem
+    public interface IDrawSystem : ISystem
     {
         public void Draw();
     }
