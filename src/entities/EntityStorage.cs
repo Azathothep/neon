@@ -139,7 +139,7 @@ namespace neon
 
         public EntityID[] GetRoots()
         {
-            return m_EntityIDs.Where((e) => !m_ChildToParent.ContainsKey(e)).ToArray();
+            return m_EntityIDs.Where((e) => !e.isComponent && !m_ChildToParent.ContainsKey(e)).ToArray();
         }
     }
 }
