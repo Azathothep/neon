@@ -34,6 +34,8 @@ namespace neon
             if (system is IDrawSystem drawSystem)
                 storage.Draw.Add(drawSystem);
         
+            if (system is IStartable startable)
+                startable.OnStart();
         }
 
         public static void Remove(ISystem system)
@@ -43,6 +45,9 @@ namespace neon
 
             if (system is IDrawSystem drawSystem)
                 storage.Draw.Remove(drawSystem);
+
+            if (system is IStoppable stoppable)
+                stoppable.OnStop();
         }
 
         public static ISystem[] GetLoadedSystems()
