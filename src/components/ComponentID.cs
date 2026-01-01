@@ -12,7 +12,7 @@ namespace neon
             m_ID = id;
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             return obj is ComponentID c && c.ID == this.ID;
         }
@@ -27,7 +27,7 @@ namespace neon
             }
         }
 
-        public int CompareTo(ComponentID? other)
+        public int CompareTo(ComponentID other)
         {
             return other == null ? -int.MaxValue : this.ID.CompareTo(other.ID);
         }

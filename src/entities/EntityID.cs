@@ -119,21 +119,21 @@ namespace neon
             return depth;
         }
 
-        public T? Add<T>() where T : Component, new() => neon.Components.Add<T>(this);
+        public T Add<T>() where T : Component, new() => neon.Components.Add<T>(this);
 
-        public T? Add<T>(T inputComponent) where T : Component => neon.Components.Add<T>(this, inputComponent);
+        public T Add<T>(T inputComponent) where T : Component => neon.Components.Add<T>(this, inputComponent);
 
-        public T? Get<T>() where T : Component => neon.Components.Get<T>(this);
+        public T Get<T>() where T : Component => neon.Components.Get<T>(this);
 
 		public Component[] GetAll() => neon.Components.GetAll(this);
 
-        public bool TryGet<T>(out T? component) where T : Component => neon.Components.TryGet(this, out component);
+        public bool TryGet<T>(out T component) where T : Component => neon.Components.TryGet(this, out component);
 
-        public (T1?, T2?) Get<T1, T2>() where T1 : Component where T2 : Component => neon.Components.Get<T1, T2>(this);
+        public (T1, T2) Get<T1, T2>() where T1 : Component where T2 : Component => neon.Components.Get<T1, T2>(this);
 
-        public (T1?, T2?, T3?) Get<T1, T2, T3>() where T1 : Component where T2 : Component where T3 : Component => neon.Components.Get<T1, T2, T3>(this);
+        public (T1, T2, T3) Get<T1, T2, T3>() where T1 : Component where T2 : Component where T3 : Component => neon.Components.Get<T1, T2, T3>(this);
 
-        public (T1?, T2?, T3?, T4?) Get<T1, T2, T3, T4>() where T1 : Component where T2 : Component where T3 : Component where T4 : Component => neon.Components.Get<T1, T2, T3, T4>(this);
+        public (T1, T2, T3, T4) Get<T1, T2, T3, T4>() where T1 : Component where T2 : Component where T3 : Component where T4 : Component => neon.Components.Get<T1, T2, T3, T4>(this);
 
         public void Remove<T>() where T : Component => Components.Remove<T>(this);
 

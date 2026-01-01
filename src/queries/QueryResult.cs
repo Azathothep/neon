@@ -80,7 +80,7 @@ namespace neon
 
         public bool IsDirty => m_IsDirty;
 
-		private IEnumerable? m_Storage;
+		private IEnumerable m_Storage;
 
         private QueryResultMode m_Mode;
 

@@ -22,14 +22,14 @@ namespace neon
             return storage.Has<T>(entityID);
         }
 
-        public static T? Get<T>(EntityID entityID) where T : Component
+        public static T Get<T>(EntityID entityID) where T : Component
         {
             return storage.Get<T>(entityID);
         }
 
 		public static Component[] GetAll(EntityID entityID) => storage.GetAll(entityID);
 
-        public static (T1?, T2?) Get<T1, T2>(EntityID entityID) where T1 : Component where T2 : Component
+        public static (T1, T2) Get<T1, T2>(EntityID entityID) where T1 : Component where T2 : Component
         {
             object[] rawComponents = storage.GetComponentsInternal(entityID, new ComponentID[]
             {
@@ -40,7 +40,7 @@ namespace neon
             return ((T1)rawComponents[0], ((T2)rawComponents[1]));
         }
 
-        public static (T1?, T2?, T3?) Get<T1, T2, T3>(EntityID entityID) where T1 : Component where T2 : Component where T3 : Component
+        public static (T1, T2, T3) Get<T1, T2, T3>(EntityID entityID) where T1 : Component where T2 : Component where T3 : Component
         {
             object[] rawComponents = storage.GetComponentsInternal(entityID, new ComponentID[]
             {
@@ -52,7 +52,7 @@ namespace neon
             return ((T1)rawComponents[0], (T2)rawComponents[1], (T3)rawComponents[2]);
         }
 
-        public static (T1?, T2?, T3?, T4?) Get<T1, T2, T3, T4>(EntityID entityID) where T1 : Component where T2 : Component where T3 : Component where T4 : Component
+        public static (T1, T2, T3, T4) Get<T1, T2, T3, T4>(EntityID entityID) where T1 : Component where T2 : Component where T3 : Component where T4 : Component
         {
             object[] rawComponents = storage.GetComponentsInternal(entityID, new ComponentID[]
             {
@@ -65,23 +65,23 @@ namespace neon
             return ((T1)rawComponents[0], (T2)rawComponents[1], (T3)rawComponents[2], (T4)rawComponents[3]);
         }
 
-        public static bool TryGet<T>(EntityID entityID, out T? result) where T : Component
+        public static bool TryGet<T>(EntityID entityID, out T result) where T : Component
         {
             result = storage.Get<T>(entityID);
             return result != null;
         }
 
-        public static T? Add<T>(EntityID entityID) where T : Component, new()
+        public static T Add<T>(EntityID entityID) where T : Component, new()
         {
             return storage.Add(entityID, new T());
         }
 
-        public static T? Add<T>(EntityID entityID, T inputComponent) where T : Component
+        public static T Add<T>(EntityID entityID, T inputComponent) where T : Component
         {
             return storage.Add(entityID, (T)inputComponent.Clone());
         }
 
-        public static Component? Add(EntityID entityID, Component inputComponent, Type type)
+        public static Component Add(EntityID entityID, Component inputComponent, Type type)
         {
             return storage.Add(entityID, inputComponent, type);
         }

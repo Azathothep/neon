@@ -70,7 +70,7 @@ namespace neon
             return true;
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             return obj is ComponentSet other && m_ComponentIDs.SequenceEqual(other.ComponentIDs);
         }

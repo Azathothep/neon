@@ -26,9 +26,8 @@ namespace neon {
             }
 
             public void AddAfter(Type system, Type precedingSystem) {
-                HashSet<Node> dependencies;
                 Node node;
-                Node? precedingNode = m_Root;
+                Node precedingNode = m_Root;
                 
                 if (precedingSystem != null)
                     precedingNode = m_TypeToNode.GetValueOrDefault(precedingSystem);
@@ -130,8 +129,8 @@ namespace neon {
                 MoveAfter(node, m_Root);
             }
 
-            private HashSet<Node>? RemoveDependencyRecursive(Node from, Node dependency) {
-                if (m_Dependencies.TryGetValue(from, out HashSet<Node>? dependencies)) {
+            private HashSet<Node> RemoveDependencyRecursive(Node from, Node dependency) {
+                if (m_Dependencies.TryGetValue(from, out HashSet<Node> dependencies)) {
                     dependencies.Remove(dependency);
                 }
 
@@ -264,7 +263,7 @@ namespace neon {
             
             Type type = system.GetType();
             
-            if (m_SystemsByType.TryGetValue(type, out List<T>? systems)) {
+            if (m_SystemsByType.TryGetValue(type, out List<T> systems)) {
                 systems.Remove(system);
 
                 if (systems.Count == 0) {
@@ -303,7 +302,7 @@ namespace neon {
         private void AddToTree(T system) {                
             Type type = system.GetType();
 
-            if (m_SystemsComingBefore.TryGetValue(type, out HashSet<Type>? systemsComingBefore)) {
+            if (m_SystemsComingBefore.TryGetValue(type, out HashSet<Type> systemsComingBefore)) {
 
                 foreach (var precedingSystem in systemsComingBefore)
                     m_OrderTree.AddAfter(type, precedingSystem);
@@ -314,7 +313,7 @@ namespace neon {
                 m_OrderTree.AddAfter(type, null);
             }
 
-            if (m_SystemsComingAfter.TryGetValue(type, out HashSet<Type>? systemsComingAfter)) {
+            if (m_SystemsComingAfter.TryGetValue(type, out HashSet<Type> systemsComingAfter)) {
 
                 foreach (var followingSystem in systemsComingAfter)
                     m_OrderTree.AddBefore(type, followingSystem);
@@ -328,7 +327,7 @@ namespace neon {
             List<Type> order = m_OrderTree.ToList();
 
             foreach (var type in order) {
-                if (m_SystemsByType.TryGetValue(type, out List<T>? systems)) {
+                if (m_SystemsByType.TryGetValue(type, out List<T> systems)) {
                     m_Systems.AddRange(systems);
                 }
             }

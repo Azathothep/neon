@@ -57,7 +57,7 @@ namespace neon
             foreach (var c in children)
                 Destroy(c);
 
-            EntityID? parentID = GetParent(entityID);
+            EntityID parentID = GetParent(entityID);
             if (parentID != null)
                 RemoveRelation(parentID, entityID);
 
@@ -69,7 +69,7 @@ namespace neon
             if (parentID == null || childID == null)
                 throw new ArgumentNullException("Trying to Set Relation with a null parameter");
 
-            if (!m_ParentToChildren.TryGetValue(parentID, out HashSet<EntityID>? childSet))
+            if (!m_ParentToChildren.TryGetValue(parentID, out HashSet<EntityID> childSet))
             {
                 childSet = new HashSet<EntityID>();
                 m_ParentToChildren.Add(parentID, childSet);
@@ -87,7 +87,7 @@ namespace neon
 
         private void RemoveRelation(EntityID parentID, EntityID childID)
         {
-            if (m_ParentToChildren.TryGetValue(parentID, out HashSet<EntityID>? childSet))
+            if (m_ParentToChildren.TryGetValue(parentID, out HashSet<EntityID> childSet))
                 childSet.Remove(childID);
 
             if (m_ChildToParent.ContainsKey(childID))
@@ -99,7 +99,7 @@ namespace neon
 
         public EntityID GetParent(EntityID entityID)
         {
-            if (m_ChildToParent.TryGetValue(entityID, out EntityID? parent))
+            if (m_ChildToParent.TryGetValue(entityID, out EntityID parent))
                 return parent;
 
             return null;
@@ -107,7 +107,7 @@ namespace neon
 
         public EntityID[] GetChildren(EntityID entityID, bool includeComponents = true)
         {
-            if (m_ParentToChildren.TryGetValue(entityID, out HashSet<EntityID>? children))
+            if (m_ParentToChildren.TryGetValue(entityID, out HashSet<EntityID> children))
             {
                 if (includeComponents)
                     return children.ToArray();

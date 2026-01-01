@@ -210,7 +210,7 @@ namespace neon
             Hooks.Add(EntityHook.OnDisabled, (o) => OnEntityActiveStateChanged((EntityID)o, false));
         }
 
-        public T? Get<T>(EntityID entityID) where T : Component
+        public T Get<T>(EntityID entityID) where T : Component
         {
             ComponentID componentID = Components.GetID<T>();
 
@@ -278,12 +278,12 @@ namespace neon
             return archetypeSet.ContainsKey(archetype.ID);
         }
 
-        public T? Add<T>(EntityID entityID, T component) where T : Component
+        public T Add<T>(EntityID entityID, T component) where T : Component
         {
-            return (T?)Add(entityID, component, typeof(T));
+            return (T)Add(entityID, component, typeof(T));
         }
 
-        public Component? Add(EntityID entityID, Component component, Type type)
+        public Component Add(EntityID entityID, Component component, Type type)
         {
             Debug.WriteLine($"Adding component of type {type} to {(UInt32)entityID}");
 
@@ -502,7 +502,7 @@ namespace neon
                 m_ComponentSetToArchetype.Add(componentSet, archetype);
                 m_ArchetypeIDToArchetype.Add(archetype.ID, archetype);
 
-                m_OnArchetypeAdded?.Invoke(componentSet);
+                m_OnArchetypeAdded.Invoke(componentSet);
 
                 // foreach componentID in componentSet, add lookup data to the componenID-to-archetype-infos dictionary
                 for (int i = 0; i < componentSet.ComponentIDs.Count; i++)
@@ -605,7 +605,7 @@ namespace neon
 
             foreach (var child in children)
             {
-                T? component = child.Get<T>();
+                T component = child.Get<T>();
                 if (component != null)
                     components.Add(component);
 
@@ -624,7 +624,7 @@ namespace neon
 
             while (parent != null)
             {
-                T? component = parent.Get<T>();
+                T component = parent.Get<T>();
                 if (component != null)
                     components.Add(component);
 

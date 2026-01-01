@@ -10,7 +10,7 @@ namespace neon
     {
         IComponentIteratorProvider IteratorProvider { get; }
 
-        public T? Get<T>(EntityID entityID) where T : Component;
+        public T Get<T>(EntityID entityID) where T : Component;
 
 		public Component[] GetAll(EntityID entityID);
 
@@ -18,9 +18,9 @@ namespace neon
 
         public bool Has<T>(EntityID entityID) where T : Component;
 
-        public T? Add<T>(EntityID entityID, T component) where T : Component;
+        public T Add<T>(EntityID entityID, T component) where T : Component;
 
-        public Component? Add(EntityID entityID, Component component, Type type);
+        public Component Add(EntityID entityID, Component component, Type type);
 
         public void Remove<T>(EntityID entityID) where T : Component;
 

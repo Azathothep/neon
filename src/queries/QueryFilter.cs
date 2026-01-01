@@ -57,7 +57,7 @@ namespace neon
             m_ComponentID = componentID;
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             return (obj is IQueryFilter other) && this.Term == other.Term;
         }

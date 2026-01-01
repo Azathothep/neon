@@ -21,7 +21,7 @@ namespace neon
             m_AdditionalType = additionalType;
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             return obj is HookType<HookID> hookType && m_AdditionalType == hookType.m_AdditionalType;
         }
@@ -43,7 +43,7 @@ namespace neon
 
     public class HookType<HookID, T> : IHookType where HookID : struct, IConvertible
     {
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             return obj is HookType<HookID, T>;
         }
