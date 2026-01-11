@@ -1,7 +1,8 @@
 ﻿namespace neon
 {
-    public interface IHookType
-    {
-        
-    }
+    /// <summary>
+    /// Common interface for any type of HookType.
+    /// Represents a specific type of <c>Hook</c>.
+    /// </summary>
+    public interface IHookType { }
 }

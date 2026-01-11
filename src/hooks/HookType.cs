@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace neon
 {
+    /// <summary>
+    /// Represents a specific type of <c>Hook</c>.
+    /// </summary>
     public class HookType<HookID> : IHookType where HookID : struct, IConvertible
     {
         private Type m_AdditionalType;
@@ -41,6 +44,9 @@ namespace neon
         }
     }
 
+    /// <summary>
+    /// Represents a specific type-restrained type of Hook
+    /// </summary>
     public class HookType<HookID, T> : IHookType where HookID : struct, IConvertible
     {
         public override bool Equals(object obj)

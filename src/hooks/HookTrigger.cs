@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace neon
 {
+    /// <summary>
+    /// Provide a protected way to trigger a <c>Hook</c>.
+    /// Hooks cannot be triggered globally. They can only be triggered if they have a reference to a <c>HookTrigger</c>
+    /// </summary>
     public class HookTrigger<HookID> where HookID : struct, IConvertible {
         private Action<HookID, object> m_Raiser;
 

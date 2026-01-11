@@ -1,9 +1,15 @@
 ﻿namespace neon
 {
+    /// <summary>
+    /// Provides global methods for creating, subscribing and unsubscribing to <c>Hooks</c>
+    /// </summary>
     public static class Hooks
     {
         private static IHookStorage storage;
 
+        /// <summary>
+        /// Sets the underlying hook storage
+        /// </summary>
         public static void SetStorage(IHookStorage storage)
         {
             Hooks.storage = storage;
