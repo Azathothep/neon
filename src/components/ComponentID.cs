@@ -2,6 +2,9 @@
 
 namespace neon
 {
+    /// <summary>
+    /// Represents a specific type of <c>Component</c>
+    /// </summary>
     public class ComponentID : IComparable<ComponentID>
     {
         private int m_ID;

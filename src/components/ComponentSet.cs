@@ -2,9 +2,12 @@
 
 namespace neon
 { 
+    /// <summary>
+    /// Stores a unique set of <c>ComponentID</c>
+    /// </summary>
     public class ComponentSet
     {
-        private List<ComponentID> m_ComponentIDs; // Change to HashSet ?
+        private List<ComponentID> m_ComponentIDs;
         public List<ComponentID> ComponentIDs => m_ComponentIDs;
 
         public ComponentSet(ComponentID type)
@@ -48,6 +51,9 @@ namespace neon
             return m_ComponentIDs.Contains(componentID);
         }
 
+        /// <summary>
+        /// Check if this <c>ComponentSet</c> satisfies the provided Query
+        /// </summary>
         public bool Satisfy(IQuery query)
         {
             for (int i = 0; i < query.Filters.Length; i++)

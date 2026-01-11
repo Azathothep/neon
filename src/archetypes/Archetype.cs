@@ -6,28 +6,47 @@ namespace neon
 {
     using Column = List<Component>;
 
+    /// <summary>
+    /// Provides links between neighbours archetypes (two archetypes are neighbours if they are different by only a single component)
+    /// </summary>
     public struct ArchetypeEdges
     {
         public Archetype Add;
         public Archetype Remove;
     }
 
+    /// <summary>
+    /// Stores a specific set of <c>Component</c>.
+    /// All entities with the same set components are stored together in an archetype.
+    /// </summary>
     public class Archetype
     {
-        private ArchetypeID m_ID;
         public ArchetypeID ID => m_ID;
+        private ArchetypeID m_ID;
 
-        private ComponentSet m_ComponentSet;
+        /// <summary>
+        /// Contains the list of <c>ComponentID</c> stored by this <c>Archetype</c>
+        /// </summary>
         public ComponentSet ComponentSet => m_ComponentSet;
+        private ComponentSet m_ComponentSet;
 
-        private List<Column> m_Columns = new();
+        /// <summary>
+        /// Stores the components
+        /// </summary>
         public List<Column> Columns => m_Columns;
+        private List<Column> m_Columns = new();
 
-        private Dictionary<ComponentID, ArchetypeEdges> m_Edges = new();
+        /// <summary>
+        /// References to existing neighbours <c>Archetypes</c>
+        /// </summary>
         public Dictionary<ComponentID, ArchetypeEdges> Edges => m_Edges;
+        private Dictionary<ComponentID, ArchetypeEdges> m_Edges = new();
 
-        private int m_DisabledEndIndex;
+        /// <summary>
+        /// Every disabled entity are located before this index
+        /// </summary>
         public int DisabledEndIndex => m_DisabledEndIndex;
+        private int m_DisabledEndIndex;
 
         public int EntityCount => m_Columns[0].Count;
 

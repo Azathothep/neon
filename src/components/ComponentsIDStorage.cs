@@ -18,6 +18,9 @@ namespace neon
 
         private static ComponentsIDStorage idStorage = new();
 
+        /// <summary>
+        /// Get the associated <c>Type</c> of a Component from its <c>ComponentID</c>
+        /// </summary>
         public static Type GetType(ComponentID component)
         {
             return idStorage.IDToComponent[component];
@@ -38,6 +41,9 @@ namespace neon
             return GetIDByTypeUnsafe(componentType);
         }
 
+        /// <summary>
+        /// Same as <c>GetIDByType</c> without verification if the provided type derives from <c>Component</c>.
+        /// </summary>
         private static ComponentID GetIDByTypeUnsafe(Type componentType)
         {
             if (idStorage.ComponentToID.TryGetValue(componentType, out ComponentID componentID))

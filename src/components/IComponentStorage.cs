@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace neon
 {
+    /// <summary>
+    /// Interface container for any <c>Component</c> added to an entity.
+    /// </summary>
     public interface IComponentStorage
     {
         IComponentIteratorProvider IteratorProvider { get; }

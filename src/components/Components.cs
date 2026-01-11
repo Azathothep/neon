@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Dynamic;
-using System.Globalization;
-
-namespace neon
+﻿namespace neon
 {
+    /// <summary>
+    /// Provides global methods to Add, Remove and Get <c>components</c>
+    /// </summary>
     public static partial class Components
     {
         private static IComponentStorage storage;
 
+        /// <summary>
+        /// Set underlying component storage implementation
+        /// </summary>
         public static void SetStorage(IComponentStorage storage)
         {
             Components.storage = storage;
@@ -27,6 +25,9 @@ namespace neon
             return storage.Get<T>(entityID);
         }
 
+        /// <summary>
+        /// Get all <c>Components</c> attached to an entity
+        /// </summary>
 		public static Component[] GetAll(EntityID entityID) => storage.GetAll(entityID);
 
         public static (T1, T2) Get<T1, T2>(EntityID entityID) where T1 : Component where T2 : Component
@@ -96,6 +97,9 @@ namespace neon
             storage.Remove(entityID);
         }
 
+        /// <summary>
+        /// Get the ID of the entity the provided <c>Component</c> is attached to
+        /// </summary>
         public static EntityID GetOwner<T>(T component) where T : Component => storage.GetOwner(component);
 
         public static T[] GetInChildren<T>(EntityID entityID, bool propagate = false) where T : Component

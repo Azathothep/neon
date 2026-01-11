@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace neon
 {
+    /// <summary>
+    /// ID for a single <c>Archetype</c>
+    /// </summary>
     public class ArchetypeID
     {
         private int m_ID;

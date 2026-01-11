@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace neon
 {
+    /// <summary>
+    /// Creates and caches <c>IComponentIterators</c> relative to queries
+    /// </summary>
     public interface IComponentIteratorProvider
     {
         public IComponentIterator Get<T>(IQuery query, QueryType queryType) where T : Component;
