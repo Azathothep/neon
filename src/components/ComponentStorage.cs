@@ -285,7 +285,7 @@ namespace neon
 
         public Component Add(EntityID entityID, Component component, Type type)
         {
-            Debug.WriteLine($"Adding component of type {type} to {(UInt32)entityID}");
+            // Debug.WriteLine($"Adding component of type {type} to {(UInt32)entityID}");
 
             component.EntityID.SetParent(entityID);
 
