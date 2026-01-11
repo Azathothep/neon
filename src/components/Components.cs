@@ -15,6 +15,9 @@
             Components.storage = storage;
         }
 
+        /// <summary>
+        /// Request if the provided entity has a specific <c>Component</c>
+        /// </summary>
         public static bool Has<T>(EntityID entityID) where T : Component
         {
             return storage.Has<T>(entityID);
@@ -32,7 +35,7 @@
 
         public static (T1, T2) Get<T1, T2>(EntityID entityID) where T1 : Component where T2 : Component
         {
-            object[] rawComponents = storage.GetComponentsInternal(entityID, new ComponentID[]
+            object[] rawComponents = storage.GetComponentsFromIDs(entityID, new ComponentID[]
             {
                 Components.GetID<T1>(),
                 Components.GetID<T2>()
@@ -43,7 +46,7 @@
 
         public static (T1, T2, T3) Get<T1, T2, T3>(EntityID entityID) where T1 : Component where T2 : Component where T3 : Component
         {
-            object[] rawComponents = storage.GetComponentsInternal(entityID, new ComponentID[]
+            object[] rawComponents = storage.GetComponentsFromIDs(entityID, new ComponentID[]
             {
                 Components.GetID<T1>(),
                 Components.GetID<T2>(),
@@ -55,7 +58,7 @@
 
         public static (T1, T2, T3, T4) Get<T1, T2, T3, T4>(EntityID entityID) where T1 : Component where T2 : Component where T3 : Component where T4 : Component
         {
-            object[] rawComponents = storage.GetComponentsInternal(entityID, new ComponentID[]
+            object[] rawComponents = storage.GetComponentsFromIDs(entityID, new ComponentID[]
             {
                 Components.GetID<T1>(),
                 Components.GetID<T2>(),
@@ -72,11 +75,17 @@
             return result != null;
         }
 
+        /// <summary>
+        /// Add a new components of the specified type to the provided entity
+        /// </summary>
         public static T Add<T>(EntityID entityID) where T : Component, new()
         {
             return storage.Add(entityID, new T());
         }
 
+        /// <summary>
+        /// Add a clone of the provided <c>Component</c> to the provided entity
+        /// </summary>
         public static T Add<T>(EntityID entityID, T inputComponent) where T : Component
         {
             return storage.Add(entityID, (T)inputComponent.Clone());

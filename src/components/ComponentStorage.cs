@@ -495,7 +495,7 @@ namespace neon
             }
         }
 
-        public object[] GetComponentsInternal(EntityID entityID, ComponentID[] componentIDs)
+        public object[] GetComponentsFromIDs(EntityID entityID, ComponentID[] componentIDs)
         {
             object[] components = new object[componentIDs.Length];
 

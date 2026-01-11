@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace neon
 {
+    /// <summary>
+    /// Implements <c>IEntityStorage</c>. Contains EntityIDs.
+    /// </summary>
     public class EntityStorage : IEntityStorage
     {
         private HashSet<EntityID> m_EntityIDs = new();
@@ -29,6 +32,9 @@ namespace neon
             return (thirtyBits << 2) | twoBits;
         }
 
+        /// <summary>
+        /// Get a new unique EntityID
+        /// </summary>
         public EntityID GetID(bool isComponent = false)
         {
             UInt32 id = RandomUInt32();
@@ -48,11 +54,14 @@ namespace neon
             return newEntityID;
         }
 
+        /// <summary>
+        /// Destroy the provided entity and all of its children and components
+        /// </summary>
         public void Destroy(EntityID entityID)
         {
             Components.RemoveAll(entityID);
          
-            EntityID[] children = GetChildren(entityID); // logically, must not include any children components because they should have been destroyed just previously
+            EntityID[] children = GetChildren(entityID); // logically, this shouldn't return any children components because they should have been destroyed just previously
 
             foreach (var c in children)
                 Destroy(c);
@@ -64,6 +73,9 @@ namespace neon
             m_EntityIDs.Remove(entityID);
         }
 
+        /// <summary>
+        /// Set a parent / child relationship between two entities
+        /// </summary>
         public void SetRelation(EntityID parentID, EntityID childID)
         {
             if (parentID == null || childID == null)
@@ -85,6 +97,9 @@ namespace neon
             m_HookTrigger.Raise(EntityHook.OnNewParent, childID);
         }
 
+        /// <summary>
+        /// Remove the parent / children relationship between two entities
+        /// </summary>
         private void RemoveRelation(EntityID parentID, EntityID childID)
         {
             if (m_ParentToChildren.TryGetValue(parentID, out HashSet<EntityID> childSet))
@@ -105,6 +120,9 @@ namespace neon
             return null;
         }
 
+        /// <summary>
+        /// Get all children of the provided entity. As components also are entities, you can specify if they are included in the array or not.
+        /// </summary>
         public EntityID[] GetChildren(EntityID entityID, bool includeComponents = true)
         {
             if (m_ParentToChildren.TryGetValue(entityID, out HashSet<EntityID> children))
@@ -125,6 +143,9 @@ namespace neon
             return new EntityID[0];
         }
 
+        /// <summary>
+        /// Update the active state of the provided entity's children relative to their parent
+        /// </summary>
         public void UpdateState(EntityID entityID)
         {
             m_HookTrigger.Raise(entityID.activeInHierarchy ? EntityHook.OnEnabled : EntityHook.OnDisabled, entityID);
@@ -137,6 +158,9 @@ namespace neon
             }
         }
 
+        /// <summary>
+        /// Get entities at the root of the scene (without a parent)
+        /// </summary>
         public EntityID[] GetRoots()
         {
             return m_EntityIDs.Where((e) => !e.isComponent && !m_ChildToParent.ContainsKey(e)).ToArray();

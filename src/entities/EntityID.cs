@@ -5,22 +5,37 @@ using System.Linq;
 
 namespace neon
 {
+    /// <summary>
+    /// Represents an entity, be it a game object or a component 
+    /// </summary>
     public class EntityID
     {
         private UInt64 m_ID;
 
+        /// <summary>
+        /// Sets the entity can be in
+        /// </summary>
         public enum Flag
         {
+            /// <summary>
+            /// Set if this entity is active
+            /// </summary>
             Active = 1,
+
+            /// <summary>
+            /// Set if this entity's parent is active
+            /// </summary>
             ActiveParent = 2,
-            Component = 4,
-            Flag4 = 8,
-            Flag5 = 16,
-            Flag6 = 32,
-            Flag7 = 64,
-            Flag8 = 128
+
+            /// <summary>
+            /// Set if this entity is a component
+            /// </summary>
+            Component = 4
         }
 
+        /// <summary>
+        /// Specifies the reason why we want the entity to refresh its state 
+        /// </summary>
         public enum RefreshMode
         {
             ActiveState = 1,
@@ -52,10 +67,16 @@ namespace neon
             }
         }
 
+        /// <summary>
+        /// Is the entity or its parent inactive
+        /// </summary>
         public bool activeInHierarchy => GetFlag(Flag.Active | Flag.ActiveParent);
 
         public bool isComponent => GetFlag(Flag.Component);
 
+        /// <summary>
+        /// Represents how far the entity is in the hierarchy (number of parents)
+        /// </summary>
         public int depth {
             get => (int)((m_ID >> 8) & 63);
             private set {
@@ -119,8 +140,14 @@ namespace neon
             return depth;
         }
 
+        /// <summary>
+        /// Add a component of the specified type to the provided entity
+        /// </summary>
         public T Add<T>() where T : Component, new() => neon.Components.Add<T>(this);
 
+        /// <summary>
+        /// Add a clone of the provided <c>Component</c> to the provided entity
+        /// </summary>
         public T Add<T>(T inputComponent) where T : Component => neon.Components.Add<T>(this, inputComponent);
 
         public T Get<T>() where T : Component => neon.Components.Get<T>(this);
@@ -135,6 +162,9 @@ namespace neon
 
         public (T1, T2, T3, T4) Get<T1, T2, T3, T4>() where T1 : Component where T2 : Component where T3 : Component where T4 : Component => neon.Components.Get<T1, T2, T3, T4>(this);
 
+        /// <summary>
+        /// Remove the component of the specified type from the provided entity
+        /// </summary>
         public void Remove<T>() where T : Component => Components.Remove<T>(this);
 
         public EntityID GetParent() => Entities.GetParent(this);

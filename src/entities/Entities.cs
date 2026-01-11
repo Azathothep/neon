@@ -4,29 +4,56 @@ using System.Reflection;
 
 namespace neon
 {
+    /// <summary>
+    /// Provides global methods for managing entities
+    /// </summary>
     public static class Entities
     {
         private static IEntityStorage storage;
 
+        /// <summary>
+        /// Set underlying entities storage implementation
+        /// </summary>
         public static void SetStorage(IEntityStorage storage)
         {
             Entities.storage = storage;
         }
 
+        /// <summary>
+        /// Get a new unique EntityID
+        /// </summary>
         public static EntityID GetID(bool isComponent = false) => storage.GetID(isComponent);
 
+        /// <summary>
+        /// Destroy the provided entity and all of its children and components
+        /// </summary>
         public static void Destroy(EntityID entityID) => storage.Destroy(entityID);
 
+        /// <summary>
+        /// Set a parent / child relationship between two entities
+        /// </summary>
         public static void SetRelation(EntityID parentID, EntityID childID) => storage.SetRelation(parentID, childID);
 
+        /// <summary>
+        /// Get entities at the root of the scene (without a parent)
+        /// </summary>
         public static EntityID[] GetRoots() => storage.GetRoots();
 
         public static EntityID GetParent(EntityID entityID) => storage.GetParent(entityID);
 
+        /// <summary>
+        /// Get all children of the provided entity. As components also are entities, you can specify if they are included in the array or not.
+        /// </summary>
         public static EntityID[] GetChildren(EntityID entityID, bool includeComponents = true) => storage.GetChildren(entityID, includeComponents);
 
+        /// <summary>
+        /// Update the active state of the provided entity's children relative to their parent
+        /// </summary>
         public static void UpdateState(EntityID entityID) => storage.UpdateState(entityID);
 
+        /// <summary>
+        /// Structure used for keeping temporary datas when copying an entity
+        /// </summary>
         private struct CopyArchitect
         {
             public Dictionary<EntityID, EntityID> ModelToCopy = new();
@@ -36,6 +63,9 @@ namespace neon
             public CopyArchitect() { }
         }
 
+        /// <summary>
+        /// Deep copy an entity, with all of its children and components
+        /// </summary>
         public static EntityID Copy(EntityID entityModel)
         {
             CopyArchitect copyArchitect = new();
@@ -85,6 +115,10 @@ namespace neon
             return entityCopy;
         }
 
+        /// <summary>
+        /// A component is dependent on another entity or component if it keeps a reference to it.
+        /// If they are on the same hierarchy (starting from the copied entity), the reference shouldn't point to the old entity or component but to the new one.
+        /// </summary>
         private static void RegisterDependencies(Component component, CopyArchitect copyArchitect)
         {
             Type componentType = component.GetType();
@@ -122,6 +156,9 @@ namespace neon
             }
         }
 
+        /// <summary>
+        /// Get entity and component dependencies from the provided type
+        /// </summary>
         private static MemberInfo[] GetTypeDependencies(Type type)
         {
             BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
@@ -139,6 +176,9 @@ namespace neon
             return fieldDependencies.Concat(propertyDependencies).ToArray();
         }
 
+        /// <summary>
+        /// Set all object dependencies
+        /// </summary>
         private static void ResolveDependencies(CopyArchitect copyArchitect)
         {
             foreach (var dependency in copyArchitect.Dependencies)
