@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace neon
 {
+    /// <summary>
+    /// Represents a component query, describing the requested components and the <c>IQueryFilter</c> applied
+    /// </summary>
     public interface IQuery
     {
+        /// <summary>
+        /// Must the query include inactive components ?
+        /// </summary>
         public bool IncludeInactive { get; }
 
         public IQueryFilter[] Filters { get; }

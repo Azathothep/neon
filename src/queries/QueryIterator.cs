@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace neon
 {
+    /// <summary>
+    /// Derives from <c>QueryIterator</c>. Iterates through Archetypes and their Columns to provide the requested components.
+    /// </summary>
     public class QueryIterator<T> : QueryIterator, IEnumerator<(EntityID, T)> where T : Component
     {
         public QueryIterator((Archetype, List<EntityID>)[] archetypes, bool includeInactive) : base(archetypes, new ComponentID[] { Components.GetID<T>() }, includeInactive)
@@ -20,6 +23,9 @@ namespace neon
         object IEnumerator.Current => Current;
     }
 
+    /// <summary>
+    /// Derives from <c>QueryIterator</c>. Iterates through Archetypes and their Columns to provide the requested components.
+    /// </summary>
     public class QueryIterator<T1, T2> : QueryIterator, IEnumerator<(EntityID, T1, T2)> where T1 : Component where T2 : Component
     {
         public QueryIterator((Archetype, List<EntityID>)[] archetypes, bool includeInactive) : base(archetypes, new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>() }, includeInactive)
@@ -30,6 +36,9 @@ namespace neon
         object IEnumerator.Current => Current;
     }
 
+    /// <summary>
+    /// Derives from <c>QueryIterator</c>. Iterates through Archetypes and their Columns to provide the requested components.
+    /// </summary>
     public class QueryIterator<T1, T2, T3> : QueryIterator, IEnumerator<(EntityID, T1, T2, T3)> where T1 : Component where T2 : Component where T3 : Component
     {
         public QueryIterator((Archetype, List<EntityID>)[] archetypes, bool includeInactive) : base(archetypes, new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>() }, includeInactive)
@@ -40,6 +49,9 @@ namespace neon
         object IEnumerator.Current => Current;
     }
 
+    /// <summary>
+    /// Derives from <c>QueryIterator</c>. Iterates through Archetypes and their Columns to provide the requested components.
+    /// </summary>
     public class QueryIterator<T1, T2, T3, T4> : QueryIterator, IEnumerator<(EntityID, T1, T2, T3, T4)> where T1 : Component where T2 : Component where T3 : Component where T4 : Component
     {
         public QueryIterator((Archetype, List<EntityID>)[] archetypes, bool includeInactive) : base(archetypes, new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>(), Components.GetID<T4>() }, includeInactive)
@@ -50,6 +62,9 @@ namespace neon
         object IEnumerator.Current => Current;
     }
 
+    /// <summary>
+    /// Derives from <c>QueryIterator</c>. Iterates through Archetypes and their Columns to provide the requested components.
+    /// </summary>
     public class QueryIterator<T1, T2, T3, T4, T5> : QueryIterator, IEnumerator<(EntityID, T1, T2, T3, T4, T5)> where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component
     {
         public QueryIterator((Archetype, List<EntityID>)[] archetypes, bool includeInactive) : base(archetypes, new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>(), Components.GetID<T4>(), Components.GetID<T5>() }, includeInactive)
@@ -60,6 +75,9 @@ namespace neon
         object IEnumerator.Current => Current;
     }
 
+    /// <summary>
+    /// Derives from <c>QueryIterator</c>. Iterates through Archetypes and their Columns to provide the requested components.
+    /// </summary>
     public class QueryIterator<T1, T2, T3, T4, T5, T6> : QueryIterator, IEnumerator<(EntityID, T1, T2, T3, T4, T5, T6)> where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component where T6 : Component
     {
         public QueryIterator((Archetype, List<EntityID>)[] archetypes, bool includeInactive) : base(archetypes, new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>(), Components.GetID<T4>(), Components.GetID<T5>(), Components.GetID<T6>() }, includeInactive)
@@ -70,6 +88,9 @@ namespace neon
         object IEnumerator.Current => Current;
     }
 
+    /// <summary>
+    /// Derives from <c>QueryIterator</c>. Iterates through Archetypes and their Columns to provide the requested components.
+    /// </summary>
     public class QueryIterator<T1, T2, T3, T4, T5, T6, T7> : QueryIterator, IEnumerator<(EntityID, T1, T2, T3, T4, T5, T6, T7)> where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component where T6 : Component where T7 : Component
     {
         public QueryIterator((Archetype, List<EntityID>)[] archetypes, bool includeInactive) : base(archetypes, new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>(), Components.GetID<T4>(), Components.GetID<T5>(), Components.GetID<T6>(), Components.GetID<T7>() }, includeInactive)
@@ -80,19 +101,41 @@ namespace neon
         object IEnumerator.Current => Current;
     }
 
+    /// <summary>
+    /// Implements <c>IQueryIterator</c>. Iterates through Archetypes and their Columns to provide the requested components.
+    /// </summary>
     public abstract class QueryIterator : IQueryIterator
     {
-        private (Archetype, List<EntityID>)[] m_Archetypes; // List<EntityID> must stay List ? Maybe dangerous ?
+        private (Archetype, List<EntityID>)[] m_Archetypes;
 
+        /// <summary>
+        /// The index of the <c>Archetype</c> currently being iterated
+        /// </summary>
         private int m_ArchetypeIndex = 0;
+
+        /// <summary>
+        /// The position of the current entity in the current <c>Archetype</c> being iterated
+        /// </summary>
         private int m_ArchetypePosition = -1;
 
+        /// <summary>
+        /// The indices of the required <c>Component</c> columns in the current archetype, in the requested order
+        /// </summary>
         private int[] m_ColumnIndices;
 
+        /// <summary>
+        /// The componentIDs of the requested <c>Components</c>
+        /// </summary>
         private ComponentID[] m_ComponentIDs;
 
+        /// <summary>
+        /// The action to execute to move to the next value
+        /// </summary>
         public Func<bool> MoveNextAction;
 
+        /// <summary>
+        /// Must the query include inactive components ?
+        /// </summary>
         private bool m_IncludeInactive;
 
         public QueryIterator((Archetype, List<EntityID>)[] archetypes, ComponentID[] componentIDs, bool includeInactive)
@@ -112,6 +155,9 @@ namespace neon
 
         public void Dispose() { }
 
+        /// <summary>
+        /// Move to the next entity
+        /// </summary>
         public bool MoveNext()
         {
             if (m_ArchetypeIndex >= m_Archetypes.Length)
@@ -213,6 +259,9 @@ namespace neon
                 Get<T7>(m_ColumnIndices[6]));
         }
 
+        /// <summary>
+        /// Get the component at the specified column index in the currently iterated <c>Archetype</c>
+        /// </summary>
         private T Get<T>(int columnIndice) where T : Component
         {
             if (columnIndice < 0)
@@ -221,6 +270,9 @@ namespace neon
             return (T)m_Archetypes[m_ArchetypeIndex].Item1.Columns[columnIndice][m_ArchetypePosition];
         }
 
+        /// <summary>
+        /// Get the column indices of the required <c>Component</c> in the current archetype, in the requested order
+        /// </summary>
         private int[] GetIndices(Archetype archetype)
         {
             int[] indices = new int[m_ComponentIDs.Length];

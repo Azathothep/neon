@@ -5,6 +5,10 @@ using System.Linq;
 
 namespace neon
 {
+    /// <summary>
+    /// Derivation of <c>Query</c>, represents a component query and validates the <c>IQueryFilters</c> provided.
+    /// Validation rules for filters are described in the <c>Query.ProcessFilters</c> method
+    /// </summary>
     public class Query<T1> : Query where T1 : Component
     {
         public Query(bool includeInactive = false) : base(new ComponentID[] { Components.GetID<T1>() }, includeInactive) { }
@@ -26,6 +30,10 @@ namespace neon
         }
     }
 
+    /// <summary>
+    /// Derivation of <c>Query</c>, represents a component query and validates the <c>IQueryFilters</c> provided.
+    /// Validation rules for filters are described in the <c>Query.ProcessFilters</c> method
+    /// </summary>
     public class Query<T1, T2> : Query where T1 : Component where T2 : Component
     {
         public Query(bool includeInactive = false) : base(new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>() }, includeInactive) { }
@@ -48,6 +56,10 @@ namespace neon
         }
     }
 
+    /// <summary>
+    /// Derivation of <c>Query</c>, represents a component query and validates the <c>IQueryFilters</c> provided.
+    /// Validation rules for filters are described in the <c>Query.ProcessFilters</c> method
+    /// </summary>
     public class Query<T1, T2, T3> : Query where T1 : Component where T2 : Component where T3 : Component
     {
         public Query(bool includeInactive = false) : base(new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>() }, includeInactive) { }
@@ -71,6 +83,10 @@ namespace neon
         }
     }
 
+    /// <summary>
+    /// Derivation of <c>Query</c>, represents a component query and validates the <c>IQueryFilters</c> provided.
+    /// Validation rules for filters are described in the <c>Query.ProcessFilters</c> method
+    /// </summary>
     public class Query<T1, T2, T3, T4> : Query where T1 : Component where T2 : Component where T3 : Component where T4 : Component
     {
         public Query(bool includeInactive = false) : base(new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>(), Components.GetID<T4>() }, includeInactive) { }
@@ -95,6 +111,10 @@ namespace neon
         }
     }
 
+    /// <summary>
+    /// Derivation of <c>Query</c>, represents a component query and validates the <c>IQueryFilters</c> provided.
+    /// Validation rules for filters are described in the <c>Query.ProcessFilters</c> method
+    /// </summary>
     public class Query<T1, T2, T3, T4, T5> : Query where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component
     {
         public Query(bool includeInactive = false) : base(new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>(), Components.GetID<T4>(), Components.GetID<T5>() }, includeInactive) { }
@@ -120,6 +140,10 @@ namespace neon
         }
     }
 
+    /// <summary>
+    /// Derivation of <c>Query</c>, represents a component query and validates the <c>IQueryFilters</c> provided.
+    /// Validation rules for filters are described in the <c>Query.ProcessFilters</c> method
+    /// </summary>
     public class Query<T1, T2, T3, T4, T5, T6> : Query where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component where T6 : Component
     {
         public Query(bool includeInactive = false) : base(new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>(), Components.GetID<T4>(), Components.GetID<T5>(), Components.GetID<T6>() }, includeInactive) { }
@@ -146,6 +170,10 @@ namespace neon
         }
     }
 
+    /// <summary>
+    /// Derivation of <c>Query</c>, represents a component query and validates the <c>IQueryFilters</c> provided.
+    /// Validation rules for filters are described in the <c>Query.ProcessFilters</c> method
+    /// </summary>
        public class Query<T1, T2, T3, T4, T5, T6, T7> : Query where T1 : Component where T2 : Component where T3 : Component where T4 : Component where T5 : Component where T6 : Component where T7 : Component
     {
         public Query(bool includeInactive = false) : base(new ComponentID[] { Components.GetID<T1>(), Components.GetID<T2>(), Components.GetID<T3>(), Components.GetID<T4>(), Components.GetID<T5>(), Components.GetID<T6>(), Components.GetID<T7>() }, includeInactive) { }
@@ -173,6 +201,10 @@ namespace neon
         }
     }
 
+    /// <summary>
+    /// Implementation of <c>IQuery</c>, represents a component query and validates the <c>IQueryFilters</c> provided.
+    /// Validation rules for filters are described in the <c>Query.ProcessFilters</c> method
+    /// </summary>
     public abstract class Query : IQuery
     {
         protected IQueryFilter[] m_Filters;
@@ -198,13 +230,16 @@ namespace neon
             m_IncludeInactive = includeInactive;
         }
 
+        /// <summary>
+        /// Creates filters from requested component if no filter has been provided
+        /// </summary>
         protected abstract IQueryFilter[] MakeFilters();
 
         private IQueryFilter[] ProcessFilters(IQueryFilter[] filters)
         {
             List<IQueryFilter> queryFilters = new List<IQueryFilter>();
 
-            // remove doubles
+            // Remove double filters
 
             for (int i = 0; i < filters.Length; i++)
             {
@@ -216,7 +251,8 @@ namespace neon
                     continue;
                 }
 
-                // Don't add if filter component is one of the template parameter components & is indicated as "Has not"
+                // Don't add if filter component is one of the template parameter components and is indicated as "Has not"
+                // (requested components cannot have the HasNot term)
 
                 if (filters[i].Term == FilterTerm.HasNot && m_ReturnValues.Contains(filters[i].ComponentID))
                     continue;
@@ -224,7 +260,8 @@ namespace neon
                 queryFilters.Add(filters[i]);
             }
 
-            // add template types if not present
+            // Add template types with FilterTerm.Has, if not already present
+            // (requested components can have the Has or MightHave term)
 
             for (int i = 0; i < m_ReturnValues.Length; i++)
             {
@@ -232,7 +269,7 @@ namespace neon
                     queryFilters.Add(new QueryFilter(FilterTerm.Has, m_ReturnValues[i]));
             }
 
-            // sort them with "Has" first, then "Has Not", then "Might Have"
+            // Sort them with "Has" first, then "Has Not", then "Might Have"
 
             queryFilters.Sort(SortByTerm);
 
