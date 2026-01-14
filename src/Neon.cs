@@ -2,6 +2,9 @@
 {
     public class Neon
     {
+        /// <summary>
+        /// Contains the base structure storages
+        /// </summary>
         public struct Architecture
         {
             public IHookStorage HookStorage;
@@ -10,6 +13,10 @@
             public IQueryStorage QueryStorage;
         }
 
+        /// <summary>
+        /// Initializes the different base structures
+        /// </summary>
+        /// <returns></returns>
         public static Architecture Initialize()
         {
             // Hooks

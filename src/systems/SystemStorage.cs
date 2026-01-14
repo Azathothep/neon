@@ -2,12 +2,33 @@ using System.Diagnostics;
 using System.Reflection;
 
 namespace neon {
+    /// <summary>
+    /// The underlying storage for all <c>ISystem</c>
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class SystemStorage<T> where T : ISystem
     {
+        /// <summary>
+        /// An object that keeps track of and resolve each system type's order constraints specified with the <c>OrderAttribute</c>.
+        /// Throws an error if their is an impossibility ("A must before B but B must before A").
+        /// You can extract the final order with <c>ToList()</c>.
+        /// Each node in the tree represent a system type and can have children (=> the systems that must come after it)
+        /// </summary>
         private class OrderTree {
+            /// <summary>
+            /// An <c>OrderTree</c> Node representing a single system type and position in the tree
+            /// </summary>
             private class Node {
                 public Type System;
+
+                /// <summary>
+                /// The system that must be ordered before this one
+                /// </summary>
                 public Node Parent;
+                
+                /// <summary>
+                /// The system that must be ordered after this one
+                /// </summary>
                 public HashSet<Node> Children = new();
 
                 public Node(Type system) {
@@ -33,7 +54,7 @@ namespace neon {
                     precedingNode = m_TypeToNode.GetValueOrDefault(precedingSystem);
 
                 if (m_TypeToNode.TryGetValue(system, out node)) {                        
-                    ProcessNewDependance(node, precedingNode);
+                    ProcessNewDependency(node, precedingNode);
                 } else {
                     CreateNewNode(system, precedingNode);
                 }
@@ -46,7 +67,7 @@ namespace neon {
                 AddAfter(followingSystem, system);
             }
 
-            private void ProcessNewDependance(Node node, Node precedingNode) {
+            private void ProcessNewDependency(Node node, Node precedingNode) {
                 if (precedingNode == null) // preceding system isn't in hierarchy
                         return;
                     
@@ -88,12 +109,8 @@ namespace neon {
 
                 HashSet<Node> children = node.Children;
 
-                foreach (var child in children) {
-                    // check their dependencies
-                    // if they have others : move to the closest one
-
+                foreach (var child in children)
                     RemoveDependency(child, node);
-                }
 
                 node.Parent.Children.Remove(node);
                 node.Parent = null;
@@ -224,13 +241,30 @@ namespace neon {
         private List<T> m_Systems = new();
         public List<T> Systems => m_Systems;
 
+        /// <summary>
+        /// Maps all systems with the ones coming before it
+        /// </summary>
         private Dictionary<Type, HashSet<Type>> m_SystemsComingBefore = new();
+
+        /// <summary>
+        /// Maps all systems with the ones coming after it
+        /// </summary>
         private Dictionary<Type, HashSet<Type>> m_SystemsComingAfter = new();
 
+        /// <summary>
+        /// Maps systems to their types
+        /// </summary>
         private Dictionary<Type, List<T>> m_SystemsByType = new();
 
+        /// <summary>
+        /// The tree keeping track of the order constraints of the different systems
+        /// </summary>
         private OrderTree m_OrderTree = new();
 
+        /// <summary>
+        /// When adding a system to the storage, it verifies if it can emplace it in a place that respects all its Order rules.
+        /// If it can't, an error is thrown.
+        /// </summary>
         public void Add(T system) {
             Type type = system.GetType();
         
@@ -254,7 +288,7 @@ namespace neon {
                 List<T> systems = m_SystemsByType.GetOrCreateValue(type);
                 systems.Add(system);
 
-                ReorderStorage();
+                RebuildStorage();
             }
         }
 
@@ -270,11 +304,14 @@ namespace neon {
                     m_OrderTree.Remove(type);
                     m_SystemsByType.Remove(type);
 
-                    ReorderStorage();
+                    RebuildStorage();
                 }
             }
         }
 
+        /// <summary>
+        /// Register a new system type according to its specified <c>Order</c> constraints.
+        /// </summary>
         private void RegisterPredicates(Type type, IEnumerable<OrderAttribute> predicates) {
             Type systemCategory = typeof(T);
             
@@ -299,6 +336,9 @@ namespace neon {
             }
         }
 
+        /// <summary>
+        /// Insert the system in the tree
+        /// </summary>
         private void AddToTree(T system) {                
             Type type = system.GetType();
 
@@ -321,7 +361,10 @@ namespace neon {
             }
         }
 
-        public void ReorderStorage() {
+        /// <summary>
+        /// Rebuilds the final system list
+        /// </summary>
+        public void RebuildStorage() {
             m_Systems.Clear();
 
             List<Type> order = m_OrderTree.ToList();

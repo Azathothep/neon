@@ -3,6 +3,9 @@ using System.Reflection;
 
 namespace neon
 {
+    /// <summary>
+    /// Provides a way to update, add and remove systems from the storage
+    /// </summary>
     public static class Systems
     {
         private class InternalStorage {
@@ -12,10 +15,16 @@ namespace neon
 
         private static InternalStorage storage;
 
+        /// <summary>
+        /// Initialize the underlying system storage
+        /// </summary>
         public static void Initialize() {
             storage = new();
         }
 
+        /// <summary>
+        /// Add an active system to the storage. Its underlying system method will be called periodically.
+        /// </summary>
         public static void Add(ISystem system)
         {
             Type type = system.GetType();
@@ -38,6 +47,9 @@ namespace neon
                 startable.OnStart();
         }
 
+        /// <summary>
+        /// Remove an active system from the storage. Its underlying system method won't be called anymore.
+        /// </summary>
         public static void Remove(ISystem system)
         {
             if (system is IUpdateSystem updateSystem)
@@ -50,6 +62,9 @@ namespace neon
                 stoppable.OnStop();
         }
 
+        /// <summary>
+        /// Get the currently stored systems
+        /// </summary>
         public static ISystem[] GetLoadedSystems()
         {
             List<ISystem> gameSystems = [.. storage.Update.Systems];
@@ -65,6 +80,9 @@ namespace neon
             return gameSystems.ToArray();
         }
 
+        /// <summary>
+        /// Call the Update() method of every <c>IUpdateSystem</c> stored
+        /// </summary>
         public static void Update(TimeSpan timeSpan)
         {
             for (int i = 0; i < storage.Update.Systems.Count; i++)
@@ -73,6 +91,9 @@ namespace neon
             }
         }
 
+        /// <summary>
+        /// Call the Draw() method of every <c>IDrawSystem</c> stored
+        /// </summary>
         public static void Draw()
         {
             for (int i = 0; i < storage.Draw.Systems.Count; i++)

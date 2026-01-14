@@ -7,6 +7,9 @@ namespace neon
         After
     }
 
+    /// <summary>
+    /// Specifies when this system must be updated relative to another system
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class OrderAttribute : Attribute
     {

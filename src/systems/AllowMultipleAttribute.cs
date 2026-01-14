@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace neon
 {
+    /// <summary>
+    /// Allows multiple systems of this type to be added in the SystemStorage
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class AllowMultipleAttribute : Attribute { }
 }
