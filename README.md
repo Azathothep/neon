@@ -15,7 +15,7 @@ It features:
 - Systems ordering
 - Hooks for specitic entity and component events
 
-You can find an implementation of neon in the monogame-based engine [neongine](https://github.com/Azathothep/neongine)
+You can find an implementation of neon in the monogame-based engine [neongine](https://github.com/Azathothep/neongine).
 
 ## Getting started
 
@@ -51,15 +51,51 @@ The entity depth represent how far the entity is in the hierarchy tree. It incre
 
 ## Components
 
-- Component are entities (children), width flag isComponent
-- Enabling
-- IAwakable
-- Owner
+Components are objects attached to entities. Entities can hold any number of components, but **only one component per type**.
 
-- List of functions
-- Overide IComponentStorage
+All components derive from the `Component` abstract class.
+As a requirement, they must implement the following method that must return a copy of itself:
 
-- Archetypes ?
+```c#
+public Component Clone();
+```
+
+### Adding and removing components
+
+To add a component to an entity, simply use
+```c#
+public Component Add<T>(Component component);
+```
+
+Be careful, **the added component will be a copy** of the one you provided. It allows you to create a "model" component that can be added to multiple entities.
+
+Components also have an `Add<T>(Component)` method, which will redirect the call to their entity. It gives you the ability to chain multiple `Add` together :
+
+```c#
+entity.Add<Component1>(component1).Add<Component2>().Add<Component3>()...
+```
+
+Note that for any component that can be created with an empty constructor, it can be added using the template expression without the requiring a model component as argument.
+
+To remove any component from an entity, simply use
+
+```c#
+public void Remove<T>() where T : Component
+```
+
+### Components are also Entities
+
+Components are actually also considered as entities in neon. When a component is added to an entity, it automatically sets it as child of that entity. As a result, they can also be disabled and will automatically be if their owner entity is disabled.
+
+You can access the entity a component is attached to using the `Owner` property.
+
+```
+EntityID ownerEntity = myComponent.Owner;
+```
+
+### IAwakable
+
+Components can implement the `IAwakable` interface. The implemented `Awake()` method will be called when the component is added to the entity.
 
 ## Queries
 
