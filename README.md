@@ -43,6 +43,7 @@ public void SetParent(EntityID parent)
 ```
 
 Entities can have only one parent, but any number of children.
+
 Disabling an entity will automatically disable all of its children.
 
 ### Depth
@@ -64,7 +65,7 @@ public Component Clone();
 
 To add a component to an entity, simply use
 ```c#
-public Component Add<T>(Component component);
+public Component Add<T>(T component) where T : Component;
 ```
 
 Be careful, **the added component will be a copy** of the one you provided. It allows you to create a "model" component that can be added to multiple entities.
@@ -77,7 +78,25 @@ entity.Add<Component1>(component1).Add<Component2>().Add<Component3>()...
 
 Note that for any component that can be created with an empty constructor, it can be added using the template expression without the requiring a model component as argument.
 
-To remove any component from an entity, simply use
+To query for a specific component on an entity, you can use on of the following methods
+```c#
+public T Get<T>();
+public bool TryGet<T>(out T component);
+public (T1, T2) Get<T1, T2>();
+public (T1, T2, T3) Get<T1, T2, T3>();
+public (T1, T2, T3, T4) Get<T1, T2, T3, T4>();
+public Component[] GetAll();
+```
+
+You can also query for components in parents of children
+
+```c#
+public T[] GetInChildren<T>(bool propagate = false); // if propagate is true, it will search the entire children hierarchy. Otherwise, it will only search in its own children.
+public T[] GetInParents<T>();
+
+```
+
+And finally, to remove any component from an entity, simply use
 
 ```c#
 public void Remove<T>() where T : Component
