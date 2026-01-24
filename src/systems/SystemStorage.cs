@@ -364,7 +364,7 @@ namespace neon {
         /// <summary>
         /// Rebuilds the final system list
         /// </summary>
-        public void RebuildStorage() {
+        private void RebuildStorage() {
             m_Systems.Clear();
 
             List<Type> order = m_OrderTree.ToList();
