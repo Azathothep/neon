@@ -2,11 +2,9 @@ https://docs.github.com/en/get-started/writing-on-github/getting-started-with-wr
 
 # Neon
 
-A simple ECS framework in C#
-
-Pitch
-
+Neon is a simple Entity Component System framework in C#.
 It features:
+
 - Entities, components and systems
 - Parent-child relationships
 - Entities and component activation / desactivation
@@ -15,11 +13,11 @@ It features:
 - Systems ordering
 - Hooks for specitic entity and component events
 
-You can find an implementation of neon in the monogame-based engine [neongine](https://github.com/Azathothep/neongine).
+You can find an implementation of neon in the monogame-based engine [neongine](https://github.com/Azathothep/neongine)!
 
 ## Getting started
 
-Use Neon.Initialize() to set the base architecture.
+Before calling any neon code, be sure to call `Neon.Initialize()` to initialize the base storage architecture.
 
 ## Entities
 
@@ -91,7 +89,7 @@ public Component[] GetAll();
 You can also query for components in parents of children
 
 ```c#
-public T[] GetInChildren<T>(bool propagate = false); // if propagate is true, it will search the entire children hierarchy. Otherwise, it will only search in its own children.
+public T[] GetInChildren<T>(bool propagate = false); // By default, it will only search the components in its own children. If propagate is true, it will search the entire children hierarchy. 
 public T[] GetInParents<T>();
 
 ```
@@ -108,8 +106,8 @@ Components are actually also considered as entities in neon. When a component is
 
 You can access the entity a component is attached to using the `Owner` property.
 
-```
-EntityID ownerEntity = myComponent.Owner;
+```c#
+EntityID entity = myComponent.Owner;
 ```
 
 ### IAwakable
