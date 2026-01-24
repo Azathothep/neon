@@ -124,8 +124,6 @@ Neon provides to basic forms of systems:
 - `IUpdateSystem` provide the `Update(TimeSpan timeSpan)` method, expected to be called each frame
 - `IDrawSystem` provide the `Draw()` method, expected to be called before each render
 
-However, as long as your object implements the empty `ISystem` interface, it can be added to the System storage. Don't hesitate to create your own sub-interfaces if you need to. 
-
 ### Adding and removing systems
 
 Neon provides the `Systems` static class to work with `IUpdateSystem` and `IDrawSystem` systems.
@@ -175,15 +173,69 @@ public void Stop(); // Called when the system is removed from a SystemStorage
 ```
 
 ## Queries
+ 
+Queries are your main way to access components in batch, mainly during system updates.
 
-Queries are your main way to access components in groups, with conditions.
+A query is represented in a `Query` object. You can specify the type of components you want to request as type parameters:
+```c#
+Query query = new Query<Component1, Component2>(); 
+```
 
-- Query
-- QueryBuilder
-- QueryFilters
-- QueryResult
+And then, call the `QueryBuild` to get **all entities that have all of the specified components** and a reference to these components.
+```c#
+IEnumerable<EntityID, Component1, Component2> queryResult = QueryBuilder.Get(query, QueryType.Cached);
 
-- Override IQueryStorage
+foreach ((EntityID id, Component1 c1, Component2 c2) in queryResult)
+{
+    // do something with the components and / or the entity
+}
+```
+
+You may noticed a `QueryType` argument passed to the `QueryBuilder`, after your `Query` object.
+Queries can be specified to be cached or uncached.
+`QueryType.Cached` will store the query result for a much faster access later, but to the expand of memory space.
+`QueryType.Uncached` will not keep the query result in-memory, but it will need to rebuild it entirely the next time it is request.
+
+As a rule of thumb, if you plan to call your query each frame (in an Update system, for example), you better cache the query.
+However if you know it won't be queried again soon, it may be better to save up some memory!
+
+### Query result mode
+
+The `QueryBuilder.Get` let you optionally specify the way it stores your result, using `QueryResultMode` as third parameters.
+
+By default, the result you get from the `QueryBuilder` is a copy of the underlying storage. This is to avoid messing up the result if you add or remove components *during iteration*. As you can imagine, it is a time and memory-expensive process.
+
+Thus, you can specify the QueryResultMode to `QueryResultMode.Unsafe` to let you iterate directly on the storage. However, only do this if you know with certainty you're not going to add or remove a component during iteration!
+
+### Query filters
+
+Sometimes, you may want your query to optionally include other components, or to exclude entities that contain some other components in addition to the one requested.
+
+This is why queries can include filters to fine-tune your request, using a `QueryFilter` object.
+A `QueryFilter` take a component type as type parameter, and a term to specify the filter type:
+```c#
+QueryFilter filter1 = new QueryFilter<OptionalComponent>(FilterTerm.MightHave);
+QueryFilter filter2 = new QueryFilter<ComponentToExclude>(FilterTerm.HasNot);
+```
+
+You can then pass filters to a query in its constructor:
+```c#
+Query query = new Query<Component1>([ filter1, filter2 ]);
+```
+
+The `FilterTerm.MightHave` is used to specify one of the type parameters to be optional. Thus, in the enumerable result of your query, the component reference might be null.
+
+The `FilterTerm.HasNot` will specify to skip any entity that have the target component. However, if the component is also present in the type parameters of the `Query`, **it won't take the filter into account**.
+
+```c#
+Query query = new Query<Component1, Component2>( [ new QueryFilter<Component2>(FilterTerm.MightHave) ]); // the returned Component2 references might be null
+Query query = new Query<Component1>( [ new QueryFilter<Component1>(FilterTerm.HasNot) ]); // the filter won't be taken into account, because Component1 is already specified as a query type parameter
+```
+
+You also have the `FilterTerm.Has`, which could be useful when requesting the entity to have a specific component without returning it in the result.
+```c#
+Query query = new Query<Component1>( [ new QueryFilter<Component2>(FilterTerm.Has) ]); // all returned entities are assured to also have a Component2
+```
 
 ## Hooks
 
