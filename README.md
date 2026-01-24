@@ -7,13 +7,12 @@ It features:
 
 - Entities, components and systems
 - Parent-child relationships
-- Entities and component activation / desactivation
-- Entity copies
-- Fully customizable Component queries 
+- Entities and component activation / deactivation
+- Fully customizable component Queries 
 - Systems ordering
-- Hooks for specitic entity and component events
+- Targetted event system
 
-You can find an implementation of neon in the monogame-based engine [neongine](https://github.com/Azathothep/neongine)!
+You can find an implementation of neon in the monogame-based [neongine](https://github.com/Azathothep/neongine)!
 
 ## Getting started
 
@@ -32,7 +31,7 @@ new EntityID().
 
 ### Activation
 
-By default, a new entity is set active, but you can disable it setting its `active` property to `false`. This will impact component query results (see Component Queries).
+By default, a new entity is set active, but you can disable it setting its `active` property to `false`. This will impact component query results (see [Link Text](#queries)).
 
 ### Parenting
 
@@ -65,20 +64,20 @@ public Component Clone();
 
 To add a component to an entity, simply use
 ```c#
-public Component Add<T>(T component) where T : Component;
+public T Add<T>(T component);
 ```
 
-Be careful, **the added component will be a copy** of the one you provided. It allows you to create a "model" component that can be added to multiple entities.
+The added component will be a **copy** of the one you provided. It allows you to create a "model" component that can be added to multiple entities.
 
-Components also have an `Add<T>(Component)` method, which will redirect the call to their owner entity. It gives you the ability to chain multiple `Add` together:
+Components also have an `Add` method, which will redirect the call to their owner entity. It gives you the ability to chain multiple `Add` together:
 
 ```c#
-entity.Add<ComponentA>(ComponentA).Add<ComponentB>().Add<Component3>()...
+entity.Add<ComponentA>(ComponentA).Add<ComponentB>().Add<ComponentC>()...
 ```
 
 Note that for any component that can be created with an empty constructor, it can be added using the template expression without the requiring a model component as argument.
 
-To query for a specific component on an entity, you can use on of the following methods
+To query for a specific component on an entity, you can use one of the following methods
 ```c#
 public T Get<T>();
 public bool TryGet<T>(out T component);
@@ -127,17 +126,17 @@ Neon provides to basic forms of systems:
 ### Adding and removing systems
 
 Neon provides the `Systems` static class to work with `IUpdateSystem` and `IDrawSystem` systems.
-They can be added, removed and triggered to the underlying storage using the following methods:
+They can be added, removed and triggered from the underlying storage using the following methods:
 ```c#
 public static void Add(ISystem system);
 public static void Remove(ISystem system);
-public static void Update(TimeSpan timeSpan); // Calls the Update method on each registered system
-public static void Draw(); // Calls the Draw method on each registered draw
+public static void Update(TimeSpan timeSpan); // Calls the Update method on each registered IUpdateSystem
+public static void Draw(); // Calls the Draw method on each registered IDrawSystem
 ```
 
-Thus, your application only need to call `Systems.Update(...)` and `Systems.Draw()` at the right time to trigger the systems.
+Thus, your application only need to call `Systems.Update()` and `Systems.Draw()` at the right time to trigger the systems.
 
-By default, a system type can only be added once, but you can allow to store multiple systems of the same type using the `AllowMultiple` attribute.
+By default, a system type can only be added once, but you can allow a system type to be added multiple times using the `AllowMultiple` attribute.
 ```c#
 [AllowMultiple]
 public class MySystem: IUpdateSystem { ... }
@@ -154,10 +153,10 @@ A SystemStorage give you access to an `Add` and `Remove` method, but they main i
 Sometimes, you may want to declare an order between systems without needing to add and remove them in the desired order.
 Neon provides the `Order` class attribute, that allows you to specify one or more order constraints:
 ```c#
-public OrderAttribute(OrderType type, Type targetSystem);
+[Order(OrderType type, Type targetSystem)]
 ```
 
-Use the `OrderType` to specify if the `targetSystem` should be triggered before or after this one.
+Use the `OrderType` to specify if the attributed system should be triggered before or after the specified `targetSystem`.
 
 ```c#
 [Order(OrderType.Before, typeof(OtherSystem))]
@@ -174,14 +173,14 @@ public void Stop(); // Called when the system is removed from a SystemStorage
 
 ## Queries
  
-Queries are your main way to access components in batch, mainly during system updates.
+Queries are your main way to access components in batch, generally during system updates.
 
-A query is represented in a `Query` object. You can specify the type of components you want to request as type parameters:
+A query is represented in a `Query` object. You can specify the type of components you want to query as type parameters:
 ```c#
 Query query = new Query<ComponentA, ComponentB>(); 
 ```
 
-And then, call the `QueryBuild` to get **all entities that have all of the specified components** and a reference to these components.
+Then, pass your query to the `QueryBuild` to get **all entities that have the specified components** and a reference to these components.
 ```c#
 IEnumerable<EntityID, ComponentA, ComponentB> queryResult = QueryBuilder.Get(query, QueryType.Cached);
 
@@ -205,9 +204,13 @@ However if you know it won't be queried again soon, it may be better to save up 
 
 The `QueryBuilder.Get` let you optionally specify the way it stores your result, using `QueryResultMode` as third parameters.
 
+```c#
+IEnumerable<EntityID, ComponentA> queryResult = QueryBuilder.Get(query, QueryType.Cached, QueryResultMode.Unsafe);
+```
+
 By default, the result you get from the `QueryBuilder` is a copy of the underlying storage. This is to avoid messing up the result if you add or remove components *during iteration*. As you can imagine, it is a time and memory-expensive process.
 
-Thus, you can specify the QueryResultMode to `QueryResultMode.Unsafe` to let you iterate directly on the storage. However, only do this if you know with certainty you're not going to add or remove a component during iteration!
+Thus, you can specify the QueryResultMode to `QueryResultMode.Unsafe` to let you iterate directly on the storage. However, only do this if you know with certainty you're not going to add or remove any of the component during iteration!
 
 ### Query filters
 
@@ -225,9 +228,9 @@ You can then pass filters to a query in its constructor:
 Query query = new Query<ComponentA>([ filter1, filter2 ]);
 ```
 
-The `FilterTerm.MightHave` is used to specify one of the type parameters to be optional. Thus, in the enumerable result of your query, the component reference might be null.
+The `FilterTerm.MightHave` is used to specify one of the type parameters to be optional. Thus, in the enumerable result of your query, the component reference of the optional type might be null.
 
-The `FilterTerm.HasNot` will specify to skip any entity that have the target component. However, if the component is also present in the type parameters of the `Query`, **it won't take the filter into account**.
+The `FilterTerm.HasNot` will specify to skip any entity that have the target component. However, if the component is also present in the type parameters of the `Query`, **the filter will be discarded**.
 
 ```c#
 Query query = new Query<ComponentA, ComponentB>( [ new QueryFilter<ComponentB>(FilterTerm.MightHave) ]); // the returned ComponentB references might be null
@@ -258,7 +261,7 @@ Two types of Hooks are already implemented in neon:
 `EntityHook`, to react to entity enabling / disabling and reparenting
 
 ```c#
-Hooks.Add<EntityHook>(EntityHook.OnNewChild, () => { ... }, targetEntity); // action will be triggered when the specified entity gets a new child
+Hooks.Add<EntityHook>(EntityHook.OnNewChild, () => { ... }, targetEntity); // the action will be triggered when the specified entity gets a new child
 ```
 
 ### Hook target
@@ -295,3 +298,5 @@ Hooks cannot be triggered from anywhere. This is why you get a `HookTrigger`. Yo
 ```c#
 public void Raise(HookID hook, object target);
 ```
+
+To read an implementation of neon, you can check the monogame-based [neongine](https://github.com/Azathothep/neongine)!
