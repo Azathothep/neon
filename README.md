@@ -8,14 +8,14 @@ Pitch
 
 It features:
 - Entities, components and systems
-- Entity copies
 - Parent-child relationships
 - Entities and component activation / desactivation
+- Entity copies
 - Fully customizable Component queries 
 - Systems ordering
 - Hooks for specitic entity and component events
 
-You can find an implementation of neon in the monogame-based engine [neongine]("https://github.com/Azathothep/neongine")
+You can find an implementation of neon in the monogame-based engine [neongine](https://github.com/Azathothep/neongine)
 
 ## Getting started
 
@@ -32,12 +32,15 @@ new EntityID().
 
 ### Activation
 
-By default, a new entity is set active, but you can disable it using its `active` property. This will impact component query results (see Component Queries).
+By default, a new entity is set active, but you can disable it setting its `active` property to `false`. This will impact component query results (see Component Queries).
 
 ### Parenting
 
-An entity can be set as parent of another one (which will become its child).
-To set an entity's parent, use `public void SetParent(EntityID parent)`.
+An entity can be set as parent of another one (which will in turn become its child).
+To set an entity's parent, use
+```c#
+public void SetParent(EntityID parent)
+```
 
 Entities can have only one parent, but any number of children.
 Disabling an entity will automatically disable all of its children.
