@@ -193,10 +193,13 @@ foreach ((EntityID id, Component1 c1, Component2 c2) in queryResult)
 
 You may noticed a `QueryType` argument passed to the `QueryBuilder`, after your `Query` object.
 Queries can be specified to be cached or uncached.
+
 `QueryType.Cached` will store the query result for a much faster access later, but to the expand of memory space.
+
 `QueryType.Uncached` will not keep the query result in-memory, but it will need to rebuild it entirely the next time it is request.
 
 As a rule of thumb, if you plan to call your query each frame (in an Update system, for example), you better cache the query.
+
 However if you know it won't be queried again soon, it may be better to save up some memory!
 
 ### Query result mode
