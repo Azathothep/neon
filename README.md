@@ -17,12 +17,14 @@ You can find an implementation of neon in the monogame-based engine [neongine](h
 
 ## Getting started
 
-Before calling any neon code, be sure to call `Neon.Initialize()` to initialize the base storage architecture.
+Clone this repository and add `neon` as a reference to your C# project.
+
+Before calling any neon code, make sure to call `Neon.Initialize()` to initialize the base storage architecture.
 
 ## Entities
 
 Entities are base objects in your application. They are represented by the class EntityID.
-To create a new Entity, simply use 
+To create a new Entity, simply use:
 
 ```c#
 new EntityID().
@@ -68,8 +70,7 @@ public Component Add<T>(T component) where T : Component;
 
 Be careful, **the added component will be a copy** of the one you provided. It allows you to create a "model" component that can be added to multiple entities.
 
-Components also have an `Add<T>(Component)` method, which will redirect the call to their entity. It gives you the ability to chain multiple `Add` together :
-
+Components also have an `Add<T>(Component)` method, which will redirect the call to their owner entity. It gives you the ability to chain multiple `Add` together:
 ```c#
 entity.Add<Component1>(component1).Add<Component2>().Add<Component3>()...
 ```
@@ -86,7 +87,7 @@ public (T1, T2, T3, T4) Get<T1, T2, T3, T4>();
 public Component[] GetAll();
 ```
 
-You can also query for components in parents of children
+You can also query for components in parents or children
 
 ```c#
 public T[] GetInChildren<T>(bool propagate = false); // By default, it will only search the components in its own children. If propagate is true, it will search the entire children hierarchy. 
@@ -94,21 +95,21 @@ public T[] GetInParents<T>();
 
 ```
 
-And finally, to remove any component from an entity, simply use
+To remove any component from an entity, simply use
 
 ```c#
 public void Remove<T>() where T : Component
 ```
 
-### Components are also Entities
-
-Components are actually also considered as entities in neon. When a component is added to an entity, it automatically sets it as child of that entity. As a result, they can also be disabled and will automatically be if their owner entity is disabled.
-
-You can access the entity a component is attached to using the `Owner` property.
+And finally, you can access the entity a component is attached to using the `Owner` property.
 
 ```c#
 EntityID entity = myComponent.Owner;
 ```
+
+### Components are also entities
+
+Components are actually also considered as entities in neon. When a component is added to an entity, it automatically sets it as child of that entity. As a result, they can also be disabled and will automatically be if their owner entity is disabled.
 
 ### IAwakable
 
