@@ -71,6 +71,7 @@ public Component Add<T>(T component) where T : Component;
 Be careful, **the added component will be a copy** of the one you provided. It allows you to create a "model" component that can be added to multiple entities.
 
 Components also have an `Add<T>(Component)` method, which will redirect the call to their owner entity. It gives you the ability to chain multiple `Add` together:
+
 ```c#
 entity.Add<Component1>(component1).Add<Component2>().Add<Component3>()...
 ```
@@ -115,7 +116,67 @@ Components are actually also considered as entities in neon. When a component is
 
 Components can implement the `IAwakable` interface. The implemented `Awake()` method will be called when the component is added to the entity.
 
+## Systems
+
+Systems are objects providing a method expected to be called periodically.
+
+Neon provides to basic forms of systems:
+- `IUpdateSystem` provide the `Update(TimeSpan timeSpan)` method, expected to be called each frame
+- `IDrawSystem` provide the `Draw()` method, expected to be called before each render
+
+However, as long as your object implements the empty `ISystem` interface, it can be added to the System storage. Don't hesitate to create your own sub-interfaces if you need to. 
+
+### Adding and removing systems
+
+Neon provides the `Systems` static class to work with `IUpdateSystem` and `IDrawSystem` systems.
+They can be added, removed and triggered to the underlying storage using the following methods:
+```c#
+public static void Add(ISystem system);
+public static void Remove(ISystem system);
+public static void Update(TimeSpan timeSpan); // Calls the Update method on each registered system
+public static void Draw(); // Calls the Draw method on each registered draw
+```
+
+Thus, your application only need to call `Systems.Update(...)` and `Systems.Draw()` at the right time to trigger the systems.
+
+By default, a system type can only be added once, but you can allow to store multiple systems of the same type using the `AllowMultiple` attribute.
+```c#
+[AllowMultiple]
+public class MySystem: IUpdateSystem { ... }
+```
+
+### System storage
+
+If you need to implement other system sub-interfaces, you can use the `SystemStorage<T>` class to declare a container for those systems.
+
+A SystemStorage give you access to an `Add` and `Remove` method, but they main interest is their support to the `Order` attribute.
+
+### Order attribute
+
+Sometimes, you may want to declare an order between systems without needing to add and remove them in the desired order.
+Neon provides the `Order` class attribute, that allows you to specify one or more order constraints:
+```c#
+public OrderAttribute(OrderType type, Type targetSystem);
+```
+
+Use the `OrderType` to specify if the `targetSystem` should be triggered before or after this one.
+
+```c#
+[Order(OrderType.Before, typeof(OtherSystem))]
+public class MySystem: IUpdateSystem { ... }
+```
+
+ ### Starting and Stopping systems
+
+When using `SystemStorage` to store systems, you can also implement the `IStartable` and `IStoppable` interfaces:
+```c#
+public void Start(); // Called when the system is added to a SystemStorage
+public void Stop(); // Called when the system is removed from a SystemStorage
+```
+
 ## Queries
+
+Queries are your main way to access components in groups, with conditions.
 
 - Query
 - QueryBuilder
@@ -123,13 +184,6 @@ Components can implement the `IAwakable` interface. The implemented `Awake()` me
 - QueryResult
 
 - Override IQueryStorage
-
-## Systems
-
-- Update & Draw
-- IStartable, IStoppable
-- Systems order & SystemStorage
-- AllowMultipleAttribute
 
 ## Hooks
 
