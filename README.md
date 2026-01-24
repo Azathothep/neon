@@ -73,7 +73,7 @@ Be careful, **the added component will be a copy** of the one you provided. It a
 Components also have an `Add<T>(Component)` method, which will redirect the call to their owner entity. It gives you the ability to chain multiple `Add` together:
 
 ```c#
-entity.Add<Component1>(component1).Add<Component2>().Add<Component3>()...
+entity.Add<ComponentA>(ComponentA).Add<ComponentB>().Add<Component3>()...
 ```
 
 Note that for any component that can be created with an empty constructor, it can be added using the template expression without the requiring a model component as argument.
@@ -178,14 +178,14 @@ Queries are your main way to access components in batch, mainly during system up
 
 A query is represented in a `Query` object. You can specify the type of components you want to request as type parameters:
 ```c#
-Query query = new Query<Component1, Component2>(); 
+Query query = new Query<ComponentA, ComponentB>(); 
 ```
 
 And then, call the `QueryBuild` to get **all entities that have all of the specified components** and a reference to these components.
 ```c#
-IEnumerable<EntityID, Component1, Component2> queryResult = QueryBuilder.Get(query, QueryType.Cached);
+IEnumerable<EntityID, ComponentA, ComponentB> queryResult = QueryBuilder.Get(query, QueryType.Cached);
 
-foreach ((EntityID id, Component1 c1, Component2 c2) in queryResult)
+foreach ((EntityID id, ComponentA c1, ComponentB c2) in queryResult)
 {
     // do something with the components and / or the entity
 }
@@ -199,7 +199,6 @@ Queries can be specified to be cached or uncached.
 `QueryType.Uncached` will not keep the query result in-memory, but it will need to rebuild it entirely the next time it is request.
 
 As a rule of thumb, if you plan to call your query each frame (in an Update system, for example), you better cache the query.
-
 However if you know it won't be queried again soon, it may be better to save up some memory!
 
 ### Query result mode
@@ -212,10 +211,10 @@ Thus, you can specify the QueryResultMode to `QueryResultMode.Unsafe` to let you
 
 ### Query filters
 
-Sometimes, you may want your query to optionally include other components, or to exclude entities that contain some other components in addition to the one requested.
+Sometimes, you may want your query to optionally include other components, or to exclude entities that contain some other components in addition to the ones requested.
 
 This is why queries can include filters to fine-tune your request, using a `QueryFilter` object.
-A `QueryFilter` take a component type as type parameter, and a term to specify the filter type:
+A `QueryFilter` take a component type as type parameter, and a term to specify the type of filter to apply:
 ```c#
 QueryFilter filter1 = new QueryFilter<OptionalComponent>(FilterTerm.MightHave);
 QueryFilter filter2 = new QueryFilter<ComponentToExclude>(FilterTerm.HasNot);
@@ -223,7 +222,7 @@ QueryFilter filter2 = new QueryFilter<ComponentToExclude>(FilterTerm.HasNot);
 
 You can then pass filters to a query in its constructor:
 ```c#
-Query query = new Query<Component1>([ filter1, filter2 ]);
+Query query = new Query<ComponentA>([ filter1, filter2 ]);
 ```
 
 The `FilterTerm.MightHave` is used to specify one of the type parameters to be optional. Thus, in the enumerable result of your query, the component reference might be null.
@@ -231,17 +230,68 @@ The `FilterTerm.MightHave` is used to specify one of the type parameters to be o
 The `FilterTerm.HasNot` will specify to skip any entity that have the target component. However, if the component is also present in the type parameters of the `Query`, **it won't take the filter into account**.
 
 ```c#
-Query query = new Query<Component1, Component2>( [ new QueryFilter<Component2>(FilterTerm.MightHave) ]); // the returned Component2 references might be null
-Query query = new Query<Component1>( [ new QueryFilter<Component1>(FilterTerm.HasNot) ]); // the filter won't be taken into account, because Component1 is already specified as a query type parameter
+Query query = new Query<ComponentA, ComponentB>( [ new QueryFilter<ComponentB>(FilterTerm.MightHave) ]); // the returned ComponentB references might be null
+Query query = new Query<ComponentA>( [ new QueryFilter<ComponentA>(FilterTerm.HasNot) ]); // the filter won't be taken into account, because ComponentA is already specified as a query type parameter
 ```
 
 You also have the `FilterTerm.Has`, which could be useful when requesting the entity to have a specific component without returning it in the result.
 ```c#
-Query query = new Query<Component1>( [ new QueryFilter<Component2>(FilterTerm.Has) ]); // all returned entities are assured to also have a Component2
+Query query = new Query<ComponentA>( [ new QueryFilter<ComponentB>(FilterTerm.Has) ]); // all returned entities are assured to also have a ComponentB
 ```
 
 ## Hooks
 
-- EntityHooks
-- ComponentHooks
-- IHookStorage
+Hooks are a way to trigger and react to events that are targetted toward specific object.
+When you want to react to a hook, you can use the **Hooks** static class and register the action to trigger:
+```c#
+public static void Add<HookID>(HookID hook, Action<object> action); // global reaction
+public static void Add<HookID>(HookID hook, Action action, object target); // targetted reaction
+```
+
+### HookID
+
+The `HookID` must be an `enum` type that contain a list of events.
+
+Two types of Hooks are already implemented in neon:
+
+`ComponentHook`, to react to component addition and removal
+`EntityHook`, to react to entity enabling / disabling and reparenting
+
+```c#
+Hooks.Add<EntityHook>(EntityHook.OnNewChild, () => { ... }, targetEntity); // action will be triggered when the specified entity gets a new child
+```
+
+### Hook target
+
+You can subscribe to hooks in two ways.
+
+When specifying a third `object` argument, you target your `Action` to only be triggered when the event is called on this specific object (for example, when a specific entity is reparented).
+
+When not specifying any target `object`, your `Action` will be triggered for any target `object`, passed as parameter to your action (for exemple, when any component is removed).
+
+### Hook type constraint
+
+Suppose you can to create a hook that is only scoped to a certain component *type*. To achieve this, `Hooks` also provide type-constrainted hooks:
+```c#
+// Replace T with your type constraint
+public static void Add<HookID, T>(HookID hook, Action action, object target);
+public static void Add<HookID, T>(HookID hook, Action<object> action);
+```
+
+For example, the following action will be triggered when any `ComponentA` component is added to an entity
+```c#
+Hooks.Add<ComponentHook, ComponentA>(ComponentHook.OnAdded, (component) => { ... });
+```
+
+### Hook triggers
+
+If you want to create your own hooks, you can use `Hooks.Create`
+```c#
+public static HookTrigger<HookID> Create<HookID>(Type additionalType = null); // optionally specify a type constraint as parameter
+public static HookTrigger<HookID> Create<HookID, T>();
+```
+
+Hooks cannot be triggered from anywhere. This is why you get a `HookTrigger`. You can then use the following method to raise the event:
+```c#
+public void Raise(HookID hook, object target);
+```
